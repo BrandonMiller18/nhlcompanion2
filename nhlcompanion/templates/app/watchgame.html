@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block html_title %}Teams{% endblock %}
+{% block html_head %}
+
+<meta id="game_id" data="{{game_id}}">
+<meta id="user_team" data="{{user_team}}">
+<meta id="stream_delay" data="{{stream_delay}}">
+
+<script>
+
+    // the game_id and user's team are set in the HTML as meta tags
+    // get the data from the meta tags and assign them to variables
+    var gameIdMeta = document.getElementById('game_id');
+    var game_id = gameIdMeta.getAttribute('data');
+    var userTeamMeta = document.getElementById('user_team');
+    var userTeam = userTeamMeta.getAttribute('data'); 
+    var streamDelayMeta = document.getElementById('stream_delay');
+    var streamDelay = streamDelayMeta.getAttribute('data') * 1000; 
+
+    // set the goal horn file
+    var goalHorn = new Audio('/static/sounds/' + userTeam + '.mp3');
+
+    function getGameData() {
+        let gameData = $.ajax({
+            type: "POST",
+            url: "/watch-game/_update-score/" + game_id,
+            success: function(){
+                console.log("GOT INITIAL GAME DATA");
+            },
+            async: false
+        });
+
+        let res = gameData.responseJSON;
+
+        return res;
+    };   
+
+    function updateScore(initialGameData) {
+
+        // if game is not live, break function, do not send AJAX call, set scores
+        if (initialGameData) {
+            if (initialGameData.gameState != "LIVE") {
+                $('#home-score').html(initialGameData.homeTeam.score);
+                $('#away-score').html(initialGameData.awayTeam.score);
+                $('#period-label').hide();
+                if (initialGameData.gameState == "FUT") {
+                    $('#period').html("GAME NOT STARTED");
+                } else {
+                    $('#period').html("GAME OVER");
+                }
+                $('#time-div').hide();
+                return;
+            };
+        };
+
+        // find current score as displayed on the page, this value is updated
+        // if the new score is differnet... initial value is "Getting scores..."
+        let homeScore = $('#home-score').html();
+        let awayScore = $('#away-score').html()
+
+        // AJAX request to get updated game data
+        let newGameData = $.ajax({
+            type: "POST",
+            url: "/watch-game/_update-score/" + game_id,
+            success: function(){
+                console.log("GOT NEW SCORES");
+                setTimeout(function(){updateScore(res);}, 1000); // run this function every second
+            },
+            async: false
+        });
+
+        // grab response from AJAX request
+        let res = newGameData.responseJSON; 
+        // set the new scores
+        let newHomeScore = JSON.parse(res.homeTeam.score);
+        let newAwayScore = JSON.parse(res.awayTeam.score);
+        // set SOG
+        let homeSOG = JSON.parse(res.homeTeam.sog);
+        let awaySOG = JSON.parse(res.awayTeam.sog);
+        // get last period type of game returns str REG or OT (i think....)
+        res.gameOutcome ? lastPeriodType = res.gameOutcome.lastPeriodType : lastPeriodType = false;
+
+        // get game state returns str: LIVE, OFF, FUT
+        let gameState = res.gameState;
+        
+        // get intermission state returns true/false
+        let isIntermission = res.clock.inIntermission;
+
+        // get period to display
+        let displayPeriod = res.displayPeriod;
+
+            if (isIntermission) {
+                switch (displayPeriod) {
+                    case 1:
+                        $('#period').html("1st Intermission");
+                    case 2:
+                        $('#period').html("2nd Intermission");
+                }
+            } else {$('#period').html(displayPeriod);};
+        
+        // set the clock time 
+        $('#time').html(res.clock.timeRemaining);
+
+        // check if new score is different from old score
+        // if it is, change it -- also checks if user_team for goal horn
+        if (newHomeScore != homeScore ) {
+            setTimeout(function() {
+                $('#home-score').html(newHomeScore);
+                console.log("Home team score update");
+                if (newHomeScore > homeScore) {
+                    console.log("Home team scores");
+                if (userTeam == res.homeTeam.abbrev) {
+                    goalHorn.play();
+                };
+                };
+            }, streamDelay);
+        };
+
+        if (newAwayScore != awayScore) {
+            setTimeout(function() {
+                $('#away-score').html(newAwayScore);
+                console.log("Away team score update");
+                if (newAwayScore > awayScore) {
+                    console.log("Away team scores");
+                if (userTeam == res.awayTeam.abbrev) {
+                    goalHorn.play();
+                };
+                };
+            }, streamDelay);
+        };
+    }
+
+</script>
+
+<script>
+    // when document loads, get the initial game data then run the update_score function
+    $(document).ready(function() {
+        // get initial data to set game state, etc...
+        let initialGameData = getGameData();
+
+        // call function to continually update scores
+        updateScore(initialGameData);
+    }); 
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="main">
+    <div>
+        <a class="go-back" href=" {{ url_for('teams.pick_team') }} ">&#8592; Go back</a>
+    </div>
+    <div class="clock">
+        <div><h4 id="period-label">Period</h4><span id="period"></span></div>
+        <div id="time-div"><h4 id="time-label">Time Remaining</h4><span id="time"></span></div>
+    </div>
+    <div id="scoreboard" class="scoreboard">
+        <div class="away-team">
+            <!-- <h2>Away Team</h2> -->
+            <img src="{{ away_team['logo'] }}" alt="">
+            <h3>{{ away_team['name']['default'] }}</h3>
+            <p id="away-score">Getting scores...</p>
+        </div>
+        <div>@</div>
+        <div class="home-team">
+            <!-- <h2>Home Team</h2> -->
+            <img src="{{ home_team['logo'] }}" alt="">
+            <h3>{{ home_team['name']['default'] }}</h3>
+            <p id="home-score">Getting scores...</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

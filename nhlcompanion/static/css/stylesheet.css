@@ -1,0 +1,330 @@
+/*
+CSS RESET
+CSS RESET
+CSS RESET
+
+Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.25;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+table {
+    border-spacing: 0;
+}
+
+/* END CSS RESET */
+/* END CSS RESET */
+/* END CSS RESET */
+
+hr {width: 100%;}
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #fff;
+}
+
+body {
+    background-color: black;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    font-variant: small-caps;
+}
+
+.main {
+    padding: 50px 100px;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.title {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+}
+
+.title h1 {
+    font-size: 80px;
+}
+
+.title p {
+    font-size: 1.5rem; 
+    padding: 0 0 25px 150px;
+    text-align: justify;
+}
+
+.card-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-wrapper .stacked {
+    flex-flow: column;
+    max-width: 25vw;
+}
+
+.card-wrapper .stacked > * {
+    flex: 1;
+}
+
+.card {
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: center;
+    font-size: 1.5rem;
+    flex: 3;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    padding: 20px;
+    margin: 10px;
+    overflow-y: scroll;
+}
+
+.card.no-game {
+    flex: 100;
+    background-color: #555;
+    border-color: #555;
+    color: #888;
+    justify-content: center;
+    cursor: not-allowed;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+    font-variant: normal;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+    margin: 10px;
+}
+
+.card .flex-2 {
+    flex: 2;
+}
+
+.card::-webkit-scrollbar {
+    background-color: transparent;
+    width: 5px;
+}
+
+.card::-webkit-scrollbar-thumb {
+    background-color: #fff;
+}
+
+.card h2 {
+    font-size: 2em;
+    text-align: left;
+}
+
+.card h3 {
+    font-size: 1.5em;
+}
+
+.card h4 {
+    font-size: 1.25em;
+}
+
+.card p {
+    font-variant: normal;
+    padding-bottom: 10px;
+    text-align: left;
+}
+
+.start {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    line-height: 3rem;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 2px;
+    border-color: #ff4500;
+    background-color: orangered;
+    padding: 20px;
+    margin: 10px;
+    transition: all 0.1s;
+}
+
+.start span {
+    font-size: 10rem;
+}
+
+.start:hover {
+    cursor: pointer;
+    transform: scale(105%);
+}
+
+table {
+    border-spacing: 0 10px;
+}
+
+thead {
+    font-weight: bold;
+    font-size: 1.75rem;
+}
+
+tbody tr:hover {
+    background-color: #ffffff20;
+}
+
+tbody td a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #ff4500;
+    border-radius: 15px;
+    padding: 0 10px;
+    font-size: 1rem;
+    text-rendering: optimizeLegibility;
+}
+
+tbody td a:hover {
+    background-color: #ff450090;
+}
+
+.conference {
+    background-color: #333;
+}
+
+.go-back {
+    color: orangered;
+    text-decoration: none;
+}
+
+.teams { 
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.teams a {
+    flex: 1;
+    min-width: 250px;
+    max-width: 250px;
+    margin: 10px;
+    padding: 10px 0;
+    transition: all 0.1s;
+    /* background-color: #ffffff; */
+    border-radius: 5px;
+}
+
+.teams a:hover {
+    transform: scale(110%);
+}
+
+.clock {
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: space-around;
+    border: solid 2px white;
+    background-color: #333;
+}
+
+.clock > div {
+    margin: 20px;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+}
+
+.clock h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.scoreboard {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5rem;
+    height: min-content;
+}
+
+.scoreboard > div:not([class]) {
+    font-size: 5rem;
+}
+
+.scoreboard > div[class="away-team"], 
+.scoreboard > div[class="home-team"] {
+    flex: 2;
+}
+
+.scoreboard > div * {
+    padding: 10px 0;
+}

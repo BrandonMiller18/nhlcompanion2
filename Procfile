@@ -1,1 +1,1 @@
-web: gunicorn -w 1 create_app:app
+web: gunicorn -w 1 nhlcompanion:__init__

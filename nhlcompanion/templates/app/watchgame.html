@@ -18,7 +18,7 @@
     var streamDelay = streamDelayMeta.getAttribute('data') * 1000; 
 
     // set the goal horn file
-    var goalHorn = new Audio('/static/sounds/' + userTeam + '.mp3');
+    var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');
 
     function getGameData() {
         let gameData = $.ajax({

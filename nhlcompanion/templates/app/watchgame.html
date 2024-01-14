@@ -64,7 +64,7 @@
             url: "/watch-game/_update-score/" + game_id,
             success: function(){
                 console.log("GOT NEW SCORES");
-                setTimeout(function(){updateScore(res);}, 1000); // run this function every second
+                setTimeout(function(){updateScore(res);}, 3000); // run this function every second
             },
             async: false
         });

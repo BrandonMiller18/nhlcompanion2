@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, flash, request, redirect, url_for
 from nhlcompanion.models import Teams
 import requests
 
@@ -25,7 +25,8 @@ def watchgame(user_team, game_id):
                                venue = data['venue']['default'],
                                )
     else:
-        return "Watch the fucking game"
+        flash("Invalid request.")
+        return redirect(url_for('main.index'))
     
 
 @bp.route('/_update-score/<game_id>', methods=['POST'])

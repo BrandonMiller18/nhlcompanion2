@@ -45,9 +45,11 @@
                 $('#period-label').hide();
                 if (initialGameData.gameState == "FUT") {
                     $('#period').html("GAME NOT STARTED");
+                } else if (initialGameData.gameState == "PRE") {
+                    $('#period').html("GAME ABOUT TO START");
                 } else {
                     $('#period').html("GAME OVER");
-                }
+                };
                 $('#time-div').hide();
                 return;
             };

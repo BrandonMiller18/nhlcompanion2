@@ -6,14 +6,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         const cards = document.getElementById("card-wrapper");
         const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.maxHeight = distanceToBottom.toString() + 'px';
+        cards.style.height = distanceToBottom.toString() + 'px';
         console.log("Height: " + distanceToBottom.toString());
     });
     
     window.addEventListener('resize', function() {
         const cards = document.getElementById("card-wrapper");
         const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.maxHeight = distanceToBottom.toString() + 'px';
+        cards.style.height = distanceToBottom.toString() + 'px';
         console.log("Resized to: " + distanceToBottom.toString());
     });
 </script>

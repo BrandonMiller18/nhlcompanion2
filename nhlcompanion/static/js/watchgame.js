@@ -52,8 +52,7 @@ function updateScore(gameData) {
             $('#away-score').html(gameData.awayTeam.score);
             $('#period-label').hide();
             if (gameData.gameState == "FUT") {
-                $('#period').html("GAME NOT STARTED<br>Data is automatically refreshed every 30
-                 minutes.");
+                $('#period').html("GAME NOT STARTED<br>Data is automatically refreshed every 30 minutes.");
                 $('#time-div').hide();
                 // if not started, check API every 30 minutes
                 interval = 1800000; 

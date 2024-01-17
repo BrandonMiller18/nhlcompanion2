@@ -18,6 +18,19 @@
     });
 </script>
 
+<script>
+
+    let slug = url => new URL(url).pathname.match(/[^\/]+/g);
+    let user_team = slug(document.location.href);
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'user_team': user_team[1],
+    });
+
+
+</script>
+
 {% endblock %}
 
 {% block content %}

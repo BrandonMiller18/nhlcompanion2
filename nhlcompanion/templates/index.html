@@ -1,139 +1,48 @@
-{% extends "base.html" %}
-{% block html_title %}NHL Goal Horn App | NHL Companion{% endblock %}
-{% block html_head %}
+{% extends "base.html" %} {% block html_title %}NHL Goal Horn App | NHL
+Companion{% endblock %} {% block html_head %}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.getElementById("card-wrapper");
-        const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.height = distanceToBottom.toString() + 'px';
-        console.log("Height: " + distanceToBottom.toString());
-    });
-    
-    window.addEventListener('resize', function() {
-        const cards = document.getElementById("card-wrapper");
-        const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.height = distanceToBottom.toString() + 'px';
-        console.log("Resized to: " + distanceToBottom.toString());
-    });
+	document.addEventListener("DOMContentLoaded", function () {
+		const cards = document.getElementById("card-wrapper");
+		const distanceToBottom = innerHeight - cards.offsetTop - 50;
+		cards.style.height = distanceToBottom.toString() + "px";
+		console.log("Height: " + distanceToBottom.toString());
+	});
+
+	window.addEventListener("resize", function () {
+		const cards = document.getElementById("card-wrapper");
+		const distanceToBottom = innerHeight - cards.offsetTop - 50;
+		cards.style.height = distanceToBottom.toString() + "px";
+		console.log("Resized to: " + distanceToBottom.toString());
+	});
 </script>
 
-{% endblock %}
+<script>
+	function selected() {
+		let el = $("#pick-team");
+		el.addClass("selected");
 
-{% block content %}
+		let h1 = $("#title");
+		h1.addClass("fade-out");
+	}
+</script>
+
+{% endblock %} {% block content %}
 
 <div class="main">
-    <div class="title">
-        <h1>NHL Companion</h1>
-    </div>
-    <div id="card-wrapper" class="card-wrapper">
-        <div class="card">
-            <h2>Today's Schedule</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Home</th>
-                        <th>Away</th>
-                    </tr>
-                </thead>
+	<div class="title">
+		<h1 id="title">NHL Companion</h1>
+	</div>
 
-                <tbody>
-                    {% for game in todays_schedule %}
-                    <tr>
-                        {% for team in teams %}
-                        {% if team.team_abbreviation == game.home_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endif %}
-                        {% endfor %}
-                        
-                        {% for team in teams %}
-                        {% if team.team_abbreviation == game.away_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endif %}
-                        {% endfor %}
-                        
-                        <td><a href="{{ game.tickets_link }}" target="_blank">Tickets</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="card">
-            <h2>NHL Standings</h2>
-            {% for conference in conferences %}
-            <hr>
-            <h3 class="conference">{{ conference }} Conference</h3>
-            <hr>
-
-            {% for key, value in divisions.items() if value == conference %}
-            <h4>{{ key }} Division</h4>
-            <hr>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Team</td>
-                        <td>GP</td>
-                        <td>W</td>
-                        <td>L</td>
-                        <td>OTL</td>
-                        <td>Pts</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for record in standings %}
-                    {% for team in teams if ( (team.division == key) and 
-                        (record.team_abbreviation == team.team_abbreviation) ) %}
-                    <tr>
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        <td>{{ record.wins + record.losses + record.ot_losses }}</td>
-                        <td>{{ record.wins }}</td>
-                        <td>{{ record.losses }}</td>
-                        <td>{{ record.ot_losses }}</td>
-                        <td>{{ record.points }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            
-            {% endfor %}
-            {% endfor %}
-
-
-
-
-            <!-- <table>
-                <thead>
-                    <tr>
-                        <th>Team</th>
-                        <th>Wins</th>
-                        <th>Losses</th>
-                        <th>OTL</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for record in standings %}
-                    <tr>
-                        {% for team in teams %}
-                        {% if team.team_abbreviation == record.team_abbreviation %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endif %}
-                        {% endfor %}
-                        <td>{{ record.wins }}</td>
-                        <td>{{ record.losses }}</td>
-                        <td>{{ record.ot_losses }}</td>
-                        <td>{{ record.points }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table> -->
-        </div>
-        <a href="{{ url_for('teams.pick_team') }}" class="start">
-            <p>START<br><span class="arrow">&#8594;</span></p>
-        </a>
-    </div>
+	<section id="card-wrapper">
+		<a
+			id="pick-team"
+			href="javascript:setTimeout(()=>{window.location = '{{ url_for('teams.pick_team') }}' },1000);"
+			class="start"
+			onclick="selected()"
+			>Pick your team</a
+		>
+	</section>
 </div>
-
 
 {% endblock %}

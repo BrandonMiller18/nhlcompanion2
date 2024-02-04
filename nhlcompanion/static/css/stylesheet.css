@@ -97,10 +97,10 @@ hr {width: 100%;}
 }
 
 body {
-    background-color: black;
+    background-color: #111;
     color: #fff;
-    font-family: 'Courier New', Courier, monospace;
-    font-variant: small-caps;
+    font-family: 'Raleway', sans-serif;
+    overflow-x: hidden;
 }
 
 .main {
@@ -112,6 +112,7 @@ body {
 .title {
     display: grid;
     grid-template-columns: max-content 1fr;
+    font-variant: small-caps;
 }
 
 .title h1 {
@@ -185,6 +186,7 @@ p {
 .card h2 {
     font-size: 2em;
     text-align: left;
+    font-variant: small-caps;
 }
 
 .card h3 {
@@ -201,32 +203,59 @@ p {
     text-align: left;
 }
 
-.start {
+section {
     display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
     justify-content: center;
-    flex: 1;
-    line-height: 3rem;
-    font-size: 3rem;
-    font-weight: bold;
+    align-items: center;
+}
+
+.start {
+    position:absolute;
+    top:50%;
+    left:50%;
+    border-radius : 150px;
+    border: none;
+    padding: 100px;
+    transform: translate(-50%,-50%);
+    background-image: radial-gradient(ellipse at top left, #3e56a7, #04acff);
     color: #fff;
+    letter-spacing: 5px;
+    font-weight: bold;
+    font-size: 4rem;
     text-decoration: none;
-    border-radius: 2px;
-    border-color: #ff4500;
-    background-color: orangered;
-    padding: 20px;
-    margin: 10px;
-    transition: all 0.1s;
+    box-shadow: 0 0 10px 5px #fff;
+    animation: pick-team-animation 1s ease infinite;
 }
 
-.start span {
-    font-size: 10rem;
+.start:hover{
+    animation: none;
+    box-shadow: 0 0 15px 10px #fff;
 }
 
-.start:hover {
-    cursor: pointer;
-    transform: scale(105%);
+.start.selected {
+    margin-left: 75%;
+    transform: rotate(180deg);
+    width: max-content;
+    transition: all 3s;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: all .75s;
+}
+
+@keyframes pick-team-animation{
+    0%{
+        box-shadow: 0 0 10px 5px #fff;
+    }
+
+    50%{
+        box-shadow: 0 0 20px 10px #fff;
+    }
+
+    100% {
+        box-shadow: 0 0 10px 5px #fff;
+    }
 }
 
 table {
@@ -261,8 +290,28 @@ tbody td a:hover {
 }
 
 .go-back {
-    color: orangered;
+    color: #04acff;
+    letter-spacing: 2px;
     text-decoration: none;
+    transition: all 3s;
+}
+
+.go-back:hover {
+    animation: pulse 1s linear infinite;
+}
+
+@keyframes pulse {
+    0% {
+        font-size: 100%;
+    }
+
+    50% {
+        font-size: 80%;
+    }
+
+    100% {
+        font-size: 100%;
+    }
 }
 
 .teams { 
@@ -277,14 +326,47 @@ tbody td a:hover {
     max-width: 250px;
     margin: 10px;
     padding: 10px 0;
-    transition: all 0.1s;
-    /* background-color: #ffffff; */
+    transition: all 0.3s;
     border-radius: 5px;
+    transition: all .75s;
 }
 
-.teams a:hover {
-    transform: scale(110%);
+.teams a.pulse:hover {
+    animation: pulse-logo 1s infinite;
 }
+
+@keyframes pulse-logo {
+    0% {
+        transform: scale(100%)
+    }
+    50% {
+        transform: scale(120%);
+        transform: rotate(15deg);
+    }
+    75% {
+        transform: rotate(-15deg);
+    }
+    100% {
+        transform: scale(100%);
+        transform: rotate(0deg);
+    }
+}
+
+.chosen {
+    animation: chosen 1.5s;
+}
+
+@keyframes chosen {
+    0% {
+
+    }
+
+    100% {
+        transform: rotate(355deg) scale(300%);
+        top: inherit;
+    }
+}
+
 
 .clock {
     margin: 0 auto 30px;
@@ -327,4 +409,13 @@ tbody td a:hover {
 
 .scoreboard > div * {
     padding: 10px 0;
+}
+
+
+
+@media screen and (max-width: 1500px) {
+    .start {
+        font-size: 2rem;
+        padding: 50px;
+    }
 }

@@ -219,19 +219,19 @@ section {
     border: none;
     padding: 100px;
     transform: translate(-50%, -50%);
-    background-image: radial-gradient(ellipse at top left, #3e56a7, #04acff);
+    background-color: #ff4500;
     color: #fff;
-    letter-spacing: 5px;
+    letter-spacing: 3px;
     font-weight: bold;
     font-size: 4rem;
     text-decoration: none;
-    box-shadow: 0 0 10px 5px #fff;
-    animation: pick-team-animation 1s ease infinite;
+    box-shadow: 0 0 0px 2px #fff;
 }
 
 .start:hover {
-    animation: none;
-    box-shadow: 0 0 15px 10px #fff;
+    box-shadow: 0 0 0px 5px #fff;
+    background-color: #ff450050;
+    transition: all 0.25s;
 }
 
 .start.selected {

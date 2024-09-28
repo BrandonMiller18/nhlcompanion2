@@ -429,11 +429,87 @@ tbody td a:hover {
     padding: 10px 0;
 }
 
-
+/* MEDIA QUERIES */
 
 @media screen and (max-width: 1500px) {
     .start {
         font-size: 2rem;
         padding: 50px;
     }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .main {
+        padding: 50px 0 0;
+        row-gap: 10px;
+    }
+
+    .title {
+        display: initial;
+        text-align: center;
+    }
+
+    .title h1 {
+        font-size: 30px;
+
+    }
+
+    .start {
+        width: 75vw;
+        text-align: center;
+        border-radius: 10px;
+        border: none;
+        padding: 20px 30px;
+        transform: translate(-50%, -50%);
+        background-color: #ff4500;
+        color: #fff;
+        letter-spacing: 1px;
+        font-weight: bold;
+        font-size: 1.25rem;
+        text-decoration: none;
+        box-shadow: 0 0 0px 2px #fff;
+    }
+
+    .go-back {
+        position: absolute;
+        top: 20px;
+        left: 15px;
+    }
+
+    .card-wrapper {
+        flex-flow: column;
+        row-gap: 10px;
+    }
+
+    .card {
+        margin: 0;
+    }
+
+    .card h2 {
+        font-size: 24px;
+    }
+
+    table {
+        min-height: fit-content;
+    }
+
+    thead {
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    tbody {
+        font-size: 1rem;
+    }
+
+    .card-wrapper .stacked {
+        flex-flow: column;
+        min-width: 100vw;
+    }
+
+    .start-app {
+        background-color: green;
+    }
+
 }

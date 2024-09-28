@@ -4,17 +4,24 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.getElementById("card-wrapper");
-        const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.height = distanceToBottom.toString() + 'px';
-        console.log("Height: " + distanceToBottom.toString());
+
+        if (screen.width > 500) {
+            const cards = document.getElementById("card-wrapper");
+            const distanceToBottom = innerHeight - cards.offsetTop - 50;
+            cards.style.height = distanceToBottom.toString() + 'px';
+            console.log("Height: " + distanceToBottom.toString());
+        }
     });
     
     window.addEventListener('resize', function() {
-        const cards = document.getElementById("card-wrapper");
-        const distanceToBottom = innerHeight - cards.offsetTop - 50;
-        cards.style.height = distanceToBottom.toString() + 'px';
-        console.log("Resized to: " + distanceToBottom.toString());
+
+        if (screen.width > 500) {
+            const cards = document.getElementById("card-wrapper");
+            const distanceToBottom = innerHeight - cards.offsetTop - 50;
+            cards.style.height = distanceToBottom.toString() + 'px';
+            console.log("Resized to: " + distanceToBottom.toString());
+        }
+
     });
 </script>
 
@@ -43,6 +50,24 @@
         {% for team in teams if team.team_abbreviation == team_abbreviation %}
         <h1>{{ team.team_city }} {{ team.team_name }}</h1>
         {% endfor %}
+    </div>
+    <div class="card-wrapper stacked">
+        {% if game_id %}
+        <div class="card">
+            <h3>Set stream delay</h3>
+            <p>The amount of time the app will pause before playing the goal horn.
+                Tweak this value to work with your stream.</p>
+            <form action="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" method="post">
+                <input name="stream-delay" type="number" value="10">
+        </div>
+            <input type="submit" href="#" class="start-app" value="START APP">
+        </form>
+        {% else %}
+        <div class="card no-game">
+            <h3>No game today</h3>
+        </div>
+        <p class="no-game">Come back on a day your team plays to use the NHL Companion goal horn app. It's cool, I promise.</p>
+        {% endif %}
     </div>
     <div id="card-wrapper" class="card-wrapper">
         <!-- <div class="card flex-2">
@@ -80,24 +105,7 @@
             </table>
 
         </div>
-        <div class="card-wrapper stacked">
-            {% if game_id %}
-            <div class="card">
-                <h3>Set stream delay</h3>
-                <p>The amount of time the app will pause before playing the goal horn.
-                    Tweak this value to work with your stream.</p>
-                <form action="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" method="post">
-                    <input name="stream-delay" type="number" value="10">
-            </div>
-                <input type="submit" href="#" class="start-app" value="START APP">
-            </form>
-                {% else %}
-            <div class="card no-game">
-                <h3>No game today</h3>
-            </div>
-            <p class="no-game">Come back on a day your team plays to use the NHL Companion goal horn app. It's cool, I promise.</p>
-            {% endif %}
-        </div>
+
     </div>
 </div>
 

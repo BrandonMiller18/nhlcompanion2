@@ -95,12 +95,12 @@ hr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #fff;
+    background-color: #fefefe;
 }
 
 body {
     background-color: #111;
-    color: #fff;
+    color: #fefefe;
     font-family: 'Raleway', sans-serif;
     overflow-x: hidden;
 }
@@ -147,7 +147,7 @@ body {
     text-align: center;
     font-size: 1.5rem;
     flex: 3;
-    border: 2px solid #fff;
+    border: 2px solid #fefefe;
     border-radius: 2px;
     padding: 20px;
     margin: 10px;
@@ -155,12 +155,16 @@ body {
 }
 
 .card.no-game {
-    flex: 100;
+    flex: 2;
     background-color: #555;
     border-color: #555;
     color: #888;
     justify-content: center;
     cursor: not-allowed;
+}
+
+.no-game {
+    flex: 1;
 }
 
 p {
@@ -182,7 +186,7 @@ p {
 }
 
 .card::-webkit-scrollbar-thumb {
-    background-color: #fff;
+    background-color: #fefefe;
 }
 
 .card h2 {
@@ -215,22 +219,24 @@ section {
     position: absolute;
     top: 50%;
     left: 50%;
-    border-radius: 150px;
-    border: none;
+    border-radius: 20px;
+    border: #04acff solid 5px;
     padding: 100px;
     transform: translate(-50%, -50%);
-    background-color: #ff4500;
-    color: #fff;
+    background-color: #fefefe;
+    color: #000;
     letter-spacing: 3px;
     font-weight: bold;
     font-size: 4rem;
     text-decoration: none;
-    box-shadow: 0 0 0px 2px #fff;
+    box-shadow: 0 0 0px 0px #fefefe;
 }
 
 .start:hover {
-    box-shadow: 0 0 0px 5px #fff;
-    background-color: #ff450050;
+    box-shadow: 0 0 0px 5px #fefefe;
+    background-color: #04acff;
+    cursor: pointer;
+    color: #fefefe;
     transition: all 0.25s;
 }
 
@@ -243,16 +249,18 @@ section {
 
 .start-app {
     border: white 2px solid;
-    background-color: #ff4500;
-    color: #fff;
+    background-color: #04acff;
+    color: #fefefe;
     font-weight: bold;
     font-size: 36px;
     margin: 10px;
 }
 
 .start-app:hover {
-    background-color: #ff450090;
+    box-shadow: 0 0 0px 5px #fefefe;
+    background-color: #04acff;
     cursor: pointer;
+    color: #fefefe;
     transition: all 0.25s;
 }
 
@@ -263,15 +271,15 @@ section {
 
 @keyframes pick-team-animation {
     0% {
-        box-shadow: 0 0 10px 5px #fff;
+        box-shadow: 0 0 10px 5px #fefefe;
     }
 
     50% {
-        box-shadow: 0 0 20px 10px #fff;
+        box-shadow: 0 0 20px 10px #fefefe;
     }
 
     100% {
-        box-shadow: 0 0 10px 5px #fff;
+        box-shadow: 0 0 10px 5px #fefefe;
     }
 }
 
@@ -285,21 +293,21 @@ thead {
 }
 
 tbody tr:hover {
-    background-color: #ffffff20;
+    background-color: #fefefe20;
 }
 
 tbody td a {
     text-decoration: none;
-    color: #fff;
-    background-color: #ff4500;
+    color: #fefefe;
+    background-color: #04acff;
     border-radius: 15px;
-    padding: 0 10px;
+    padding: 2px 10px;
     font-size: 1rem;
     text-rendering: optimizeLegibility;
 }
 
 tbody td a:hover {
-    background-color: #ff450090;
+    background-color: #04acff90;
 }
 
 .conference {
@@ -307,28 +315,14 @@ tbody td a:hover {
 }
 
 .go-back {
+    padding: 5px;
     color: #04acff;
     letter-spacing: 2px;
     text-decoration: none;
-    transition: all 3s;
 }
 
 .go-back:hover {
-    animation: pulse 1s linear infinite;
-}
-
-@keyframes pulse {
-    0% {
-        font-size: 100%;
-    }
-
-    50% {
-        font-size: 80%;
-    }
-
-    100% {
-        font-size: 100%;
-    }
+    text-decoration: underline;
 }
 
 .teams {
@@ -463,12 +457,12 @@ tbody td a:hover {
         padding: 20px 30px;
         transform: translate(-50%, -50%);
         background-color: #ff4500;
-        color: #fff;
+        color: #fefefe;
         letter-spacing: 1px;
         font-weight: bold;
         font-size: 1.25rem;
         text-decoration: none;
-        box-shadow: 0 0 0px 2px #fff;
+        box-shadow: 0 0 0px 2px #fefefe;
     }
 
     .go-back {

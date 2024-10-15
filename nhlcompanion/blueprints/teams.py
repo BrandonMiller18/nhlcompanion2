@@ -18,24 +18,21 @@ def pick_team():
 def team_page(team):
     format = "%Y-%m-%d"
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
+    print(type(today))
 
     teams = Teams.query.all()
     team_schedule = Schedule.query.filter(or_(Schedule.home_team==team,
-                                              Schedule.away_team==team), and_(Schedule.date <= today)).all()
+                                              Schedule.away_team==team)).all()
     
+    game_id = None
     if len(team_schedule) > 0:
         for game in team_schedule:
-            
             game.date = datetime.datetime.strptime(game.date, format)
+            print(type(game.date))
             if game.date == today:
                 game_id = game.game_id
-                # game.date = datetime_obj.strftime(format)
-                break
-            else:
-                # game.date = datetime_obj.strftime(format)
-                game_id = None
-    else:
-        game_id = None
+                
+
 
     # SET TEAM DATA VALUES IN COOKIES FOR EASY ACCESS
     res = make_response(render_template('app/team_page.html',

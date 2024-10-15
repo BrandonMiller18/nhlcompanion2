@@ -2,7 +2,7 @@ import datetime
 
 from flask import Blueprint, render_template, make_response
 from nhlcompanion.models import Teams, Schedule
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, asc
 
 bp = Blueprint('teams', __name__, url_prefix='/start')
 
@@ -22,7 +22,8 @@ def team_page(team):
 
     teams = Teams.query.all()
     team_schedule = Schedule.query.filter(or_(Schedule.home_team==team,
-                                              Schedule.away_team==team)).all()
+                                              Schedule.away_team==team)).order_by(asc(Schedule.date)).all()
+    
     
     game_id = None
     if len(team_schedule) > 0:

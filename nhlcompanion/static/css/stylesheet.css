@@ -112,8 +112,8 @@ body {
 }
 
 .title {
-    display: grid;
-    grid-template-columns: max-content 1fr;
+    display: flex;
+    flex-flow: column;
     font-variant: small-caps;
 }
 
@@ -123,8 +123,9 @@ body {
 
 .title p {
     font-size: 1.5rem;
-    padding: 0 0 25px 150px;
-    text-align: justify;
+    padding: 20px 0;
+    text-align: left;
+    max-width: 1500px;
 }
 
 .card-wrapper {
@@ -216,13 +217,9 @@ section {
 }
 
 .start {
-    position: absolute;
-    top: 50%;
-    left: 50%;
     border-radius: 20px;
     border: #04acff solid 5px;
-    padding: 100px;
-    transform: translate(-50%, -50%);
+    padding: 50px;
     background-color: #fefefe;
     color: #000;
     letter-spacing: 3px;
@@ -230,6 +227,17 @@ section {
     font-size: 4rem;
     text-decoration: none;
     box-shadow: 0 0 0px 0px #fefefe;
+    animation: start-button 1s infinite;
+}
+
+@keyframes start-button {
+    50% {
+        scale: 1.025;
+    }
+
+    100% {
+        scale: 1;
+    }
 }
 
 .start:hover {
@@ -238,13 +246,6 @@ section {
     cursor: pointer;
     color: #fefefe;
     transition: all 0.25s;
-}
-
-.start.selected {
-    margin-left: 75%;
-    transform: rotate(180deg);
-    width: max-content;
-    transition: all 3s;
 }
 
 .start-app {
@@ -267,20 +268,6 @@ section {
 .fade-out {
     opacity: 0;
     transition: all .75s;
-}
-
-@keyframes pick-team-animation {
-    0% {
-        box-shadow: 0 0 10px 5px #fefefe;
-    }
-
-    50% {
-        box-shadow: 0 0 20px 10px #fefefe;
-    }
-
-    100% {
-        box-shadow: 0 0 10px 5px #fefefe;
-    }
 }
 
 table {

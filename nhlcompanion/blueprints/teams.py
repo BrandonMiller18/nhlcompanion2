@@ -1,4 +1,4 @@
-from datetime import date
+import datetime
 
 from flask import Blueprint, render_template, make_response
 from nhlcompanion.models import Teams, Schedule
@@ -16,7 +16,7 @@ def pick_team():
 
 @bp.route('/<team>')
 def team_page(team):
-    today = date.today()
+    today = datetime.date.today()
 
     teams = Teams.query.all()
     team_schedule = Schedule.query.filter(or_(Schedule.home_team==team,
@@ -24,6 +24,11 @@ def team_page(team):
     
     if len(team_schedule) > 0:
         for game in team_schedule:
+            print(type(game.date), flush=True)
+            format = "%Y-%m-%d"
+            datetime_obj = datetime.datetime.strptime(game.date, format)
+            format = "%b %d, %Y"
+            game.date = datetime_obj.strftime(format)
             if game.date == f'{today}':
                 game_id = game.game_id
                 break

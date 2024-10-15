@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block html_title %}{{team_abbreviation}} | NHL Companion{% endblock %}
+{% block html_title %}{{team_abbreviation}} Goal Horn | NHL Companion{% endblock %}
+{% block meta_desc %}Play {{team_abbreviation}} goal horn! The best hockey goal horn app!{% endblock %}
 {% block html_head %}
 
 <script>
@@ -89,6 +90,7 @@
 
                 <tbody>
                     {% for game in team_schedule %}
+                    {% if game.date >= today %}
                     <tr>
                         {% for team in teams if team.team_abbreviation == game.home_team %}
                         <td>{{ team.team_city }} {{ team.team_name }}</td>
@@ -97,9 +99,10 @@
                         <td>{{ team.team_city }} {{ team.team_name }}</td>
                         {% endfor %}
                         
-                        <td>{{ game.date }}</td>
+                        <td>{{ game.date.strftime('%b %d, %Y') }}</td>
                         <td><a href="{{ game.tickets_link }}" target="_blank">Tickets</a></td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

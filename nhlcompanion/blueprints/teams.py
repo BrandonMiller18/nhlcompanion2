@@ -24,15 +24,16 @@ def team_page(team):
     
     if len(team_schedule) > 0:
         for game in team_schedule:
-            print(type(game.date), flush=True)
             format = "%Y-%m-%d"
             datetime_obj = datetime.datetime.strptime(game.date, format)
+            
             format = "%b %d, %Y"
-            game.date = datetime_obj.strftime(format)
             if game.date == f'{today}':
                 game_id = game.game_id
+                game.date = datetime_obj.strftime(format)
                 break
             else:
+                game.date = datetime_obj.strftime(format)
                 game_id = None
     else:
         game_id = None

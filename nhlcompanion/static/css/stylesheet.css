@@ -1,496 +1,315 @@
-/*
-CSS RESET
-CSS RESET
-CSS RESET
-
-Box sizing rules */
-*,
-*::before,
-*::after {
+/* Test from chatgpt */
+/* Base Styles */
+* {
     box-sizing: border-box;
-}
-
-/* Remove default margin */
-body,
-h1,
-h2,
-h3,
-h4,
-p,
-figure,
-blockquote,
-dl,
-dd {
     margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-ul {
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e1e1e;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.dashboard {
+    background-color: #2a2a2a;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Instructions Section */
+.instructions {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.instructions h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+
+.instructions p {
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.team-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.team-name {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Controls Section */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 0.9em;
+}
+
+input[type="number"] {
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+.control-button {
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007acc;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.control-button-disabled {
+    background-color: #999;
+    color: #333;
+    pointer-events: none;
+}
+
+.control-button:hover {
+    background-color: #005f99;
+}
+
+/* Upcoming Games Section */
+.upcoming-games {
+    margin-top: 20px;
+}
+
+.upcoming-games h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+
+.game-list {
     list-style: none;
 }
 
-/* Set core root defaults */
-html:focus-within {
-    scroll-behavior: smooth;
-}
-
-/* Set core body defaults */
-body {
-    min-height: 100vh;
-    text-rendering: optimizeSpeed;
-    line-height: 1.25;
-}
-
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-    text-decoration-skip-ink: auto;
-}
-
-/* Make images easier to work with */
-img,
-picture {
-    max-width: 100%;
-    display: block;
-}
-
-/* Inherit fonts for inputs and buttons */
-input,
-button,
-textarea,
-select {
-    font: inherit;
-}
-
-/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
-@media (prefers-reduced-motion: reduce) {
-    html:focus-within {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
-
-table {
-    border-spacing: 0;
-}
-
-/* END CSS RESET */
-/* END CSS RESET */
-/* END CSS RESET */
-
-hr {
-    width: 100%;
-}
-
-::-webkit-scrollbar {
-    background-color: transparent;
-    width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #fefefe;
-}
-
-body {
-    background-color: #111;
-    color: #fefefe;
-    font-family: 'Raleway', sans-serif;
-    overflow-x: hidden;
-}
-
-.main {
-    padding: 50px 100px;
+.game-card {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 6px;
     display: flex;
-    flex-flow: column wrap;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
-.title {
+.game-details {
     display: flex;
-    flex-flow: column;
-    font-variant: small-caps;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.title h1 {
-    font-size: 80px;
-}
-
-.title p {
-    font-size: 1.5rem;
-    padding: 20px 0;
-    text-align: left;
-    max-width: 1500px;
-}
-
-.card-wrapper {
-    display: flex;
-    justify-content: space-between;
-}
-
-.card-wrapper .stacked {
-    flex-flow: column;
-    max-width: 25vw;
-}
-
-.card-wrapper .stacked>* {
-    flex: 1;
-}
-
-.card {
-    display: flex;
-    flex-flow: column nowrap;
-    text-align: center;
-    font-size: 1.5rem;
-    flex: 3;
-    border: 2px solid #fefefe;
-    border-radius: 2px;
-    padding: 20px;
-    margin: 10px;
-    overflow-y: scroll;
-}
-
-.card.no-game {
-    flex: 2;
-    background-color: #555;
-    border-color: #555;
-    color: #888;
-    justify-content: center;
-    cursor: not-allowed;
-}
-
-.no-game {
-    flex: 1;
-}
-
-p {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 200;
-    font-variant: normal;
-    letter-spacing: 1.5px;
-    line-height: 1.5;
-    margin: 10px;
-}
-
-.card .flex-2 {
-    flex: 2;
-}
-
-.card::-webkit-scrollbar {
-    background-color: transparent;
-    width: 5px;
-}
-
-.card::-webkit-scrollbar-thumb {
-    background-color: #fefefe;
-}
-
-.card h2 {
-    font-size: 2em;
-    text-align: left;
-    font-variant: small-caps;
-}
-
-.card h3 {
-    font-size: 1.5em;
-}
-
-.card h4 {
-    font-size: 1.25em;
-}
-
-.card p {
-    font-variant: normal;
-    padding-bottom: 10px;
-    text-align: left;
-}
-
-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.start {
-    border-radius: 20px;
-    border: #04acff solid 5px;
-    padding: 50px;
-    background-color: #fefefe;
-    color: #000;
-    letter-spacing: 3px;
-    font-weight: bold;
-    font-size: 4rem;
-    text-decoration: none;
-    box-shadow: 0 0 0px 0px #fefefe;
-    animation: start-button 1s infinite;
-}
-
-@keyframes start-button {
-    50% {
-        scale: 1.025;
-    }
-
-    100% {
-        scale: 1;
-    }
-}
-
-.start:hover {
-    box-shadow: 0 0 0px 5px #fefefe;
-    background-color: #04acff;
-    cursor: pointer;
-    color: #fefefe;
-    transition: all 0.25s;
-}
-
-.start-app {
-    border: white 2px solid;
-    background-color: #04acff;
-    color: #fefefe;
-    font-weight: bold;
-    font-size: 36px;
-    margin: 10px;
-}
-
-.start-app:hover {
-    box-shadow: 0 0 0px 5px #fefefe;
-    background-color: #04acff;
-    cursor: pointer;
-    color: #fefefe;
-    transition: all 0.25s;
-}
-
-.fade-out {
-    opacity: 0;
-    transition: all .75s;
-}
-
-table {
-    border-spacing: 0 10px;
-}
-
-thead {
-    font-weight: bold;
-    font-size: 1.75rem;
-}
-
-tbody tr:hover {
-    background-color: #fefefe20;
-}
-
-tbody td a {
-    text-decoration: none;
-    color: #fefefe;
-    background-color: #04acff;
-    border-radius: 15px;
-    padding: 2px 10px;
-    font-size: 1rem;
-    text-rendering: optimizeLegibility;
-}
-
-tbody td a:hover {
-    background-color: #04acff90;
-}
-
-.conference {
-    background-color: #333;
-}
-
-.go-back {
-    padding: 5px;
-    color: #04acff;
-    letter-spacing: 2px;
-    text-decoration: none;
-}
-
-.go-back:hover {
-    text-decoration: underline;
+.game-date {
+    font-size: 1em;
+    color: #bbb;
 }
 
 .teams {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-}
-
-.teams a {
-    flex: 1;
-    min-width: 250px;
-    max-width: 250px;
-    margin: 10px;
-    padding: 10px 0;
-    transition: all 0.3s;
-    border-radius: 5px;
-    transition: all .75s;
-}
-
-.teams a.pulse:hover {
-    animation: pulse-logo 1s infinite;
-}
-
-@keyframes pulse-logo {
-    0% {
-        transform: scale(100%)
-    }
-
-    50% {
-        transform: scale(120%);
-        transform: rotate(15deg);
-    }
-
-    75% {
-        transform: rotate(-15deg);
-    }
-
-    100% {
-        transform: scale(100%);
-        transform: rotate(0deg);
-    }
-}
-
-.chosen {
-    animation: chosen 1.5s;
-}
-
-@keyframes chosen {
-    0% {}
-
-    100% {
-        transform: rotate(355deg) scale(300%);
-        top: inherit;
-    }
-}
-
-
-.clock {
-    margin: 0 auto 30px;
-    display: flex;
-    justify-content: space-around;
-    border: solid 2px white;
-    background-color: #333;
-}
-
-.clock>div {
-    margin: 20px;
-    display: flex;
-    flex-flow: column;
-    text-align: center;
-}
-
-.clock h4 {
-    font-size: 1.25rem;
+    font-size: 1.2em;
     font-weight: bold;
 }
 
-.scoreboard {
+.ticket-link {
+    color: #1e90ff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.ticket-link:hover {
+    text-decoration: underline;
+}
+
+/* Desktop Layout */
+@media screen and (min-width: 768px) {
+    .dashboard {
+        max-width: 800px;
+        padding: 40px;
+    }
+
+    .header {
+        justify-content: flex-start;
+    }
+
+    .team-logo {
+        width: 80px;
+        height: 80px;
+    }
+
+    .team-name {
+        font-size: 2em;
+    }
+
+    .controls {
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .control-button {
+        padding: 12px 20px;
+    }
+
+    .upcoming-games {
+        margin-top: 30px;
+    }
+
+    .game-card {
+        padding: 20px;
+    }
+}
+
+
+/* homepage */
+
+/* Base Styles (Shared across both pages) */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
     align-items: center;
+    justify-content: center;
+    background-color: #1e1e1e;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* General Container Style */
+.container {
+    background-color: #2a2a2a;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Homepage Specific Styles */
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e1e1e;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: #2a2a2a;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
-    font-size: 1.5rem;
-    height: min-content;
 }
 
-.scoreboard>div:not([class]) {
-    font-size: 5rem;
+/* Introduction Section */
+.intro {
+    margin-bottom: 30px;
 }
 
-.scoreboard>div[class="away-team"],
-.scoreboard>div[class="home-team"] {
-    flex: 2;
+.intro h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
 }
 
-.scoreboard>div * {
-    padding: 10px 0;
+.intro p {
+    font-size: 1em;
+    line-height: 1.4;
 }
 
-/* MEDIA QUERIES */
-
-@media screen and (max-width: 1500px) {
-    .start {
-        font-size: 2rem;
-        padding: 50px;
-    }
+/* Team Selection Section */
+.team-selection {
+    background-color: #3a3a3a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
-@media only screen and (max-width: 500px) {
+.team-selection h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
 
-    .main {
-        padding: 50px 0 0;
-        row-gap: 10px;
-    }
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 15px;
+    padding: 10px;
+}
 
-    .title {
-        display: initial;
-        text-align: center;
-    }
+.team-logo {
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    .title h1 {
-        font-size: 30px;
+.team-logo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
 
-    }
-
-    .start {
-        width: 75vw;
-        text-align: center;
-        border-radius: 10px;
-        border: none;
-        padding: 20px 30px;
-        transform: translate(-50%, -50%);
-        background-color: #ff4500;
-        color: #fefefe;
-        letter-spacing: 1px;
-        font-weight: bold;
-        font-size: 1.25rem;
-        text-decoration: none;
-        box-shadow: 0 0 0px 2px #fefefe;
-    }
-
-    .go-back {
-        position: absolute;
-        top: 20px;
-        left: 15px;
-    }
-
-    .card-wrapper {
-        flex-flow: column;
-        row-gap: 10px;
-    }
-
-    .card {
-        margin: 0;
-    }
-
-    .card h2 {
-        font-size: 24px;
-    }
-
-    table {
-        min-height: fit-content;
-    }
-
-    thead {
-        font-weight: bold;
-        font-size: 1rem;
-    }
-
-    tbody {
-        font-size: 1rem;
-    }
-
-    .card-wrapper .stacked {
-        flex-flow: column;
-        min-width: 100vw;
-    }
-
-    .start-app {
-        background-color: green;
-    }
-
+.team-logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
 }

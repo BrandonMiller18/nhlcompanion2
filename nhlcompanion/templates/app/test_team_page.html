@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block html_title %}{{team_abbreviation}} Goal Horn
+| NHL Companion{% endblock %} {% block meta_desc %}Play {{team_abbreviation}}
+goal horn! The best hockey goal horn app!{% endblock %} {% block html_head %}
+<link rel="stylesheet" href="styles.css" />
+
+<script>
+	let slug = (url) => new URL(url).pathname.match(/[^\/]+/g);
+	let user_team = slug(document.location.href);
+
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		user_team: user_team[1],
+	});
+</script>
+
+<script>
+	// JavaScript functions
+	function startWatchingGame() {
+		// Function to start watching the game
+		console.log(
+			"Started watching the game with delay:",
+			document.getElementById("streamDelay").value
+		);
+	}
+
+	function manualGoalHorn() {
+		// Function to manually sound the goal horn
+		console.log("Goal horn sounded manually");
+	}
+</script>
+
+{% endblock %} {% block content %}
+<div class="dashboard">
+	<!-- How to Use Instructions -->
+	<section class="instructions">
+		<h2>How to Use This Dashboard</h2>
+		<p>
+			To get started, set the "Stream Delay" to match any delay on your video
+			feed. Then, press "Start Watching Game" to enable goal tracking.
+		</p>
+		<p>
+			<strong>Note:</strong> If your browser goes to sleep, the goal horn may
+			not sound. Keep this tab open and active for the best experience.
+		</p>
+	</section>
+
+	<!-- Header with team name and logo -->
+	<header class="header">
+		{% for team in teams if team.team_abbreviation == team_abbreviation %}
+		<img src="{{ team.logo }}" alt="Team Logo" class="team-logo" id="teamLogo" />
+		<h1 class="team-name" id="teamName">{{ team.team_city }} {{ team.team_name }}</h1>
+		{% endfor %}
+	</header>
+
+	<!-- User controls for streaming delay and goal horn -->
+	<section class="controls">
+		<label for="streamDelay">Stream Delay (seconds):</label>
+		<input
+			type="number"
+			id="streamDelay"
+			name="streamDelay"
+			min="0"
+			placeholder="Enter delay in seconds"
+		/>
+
+		{% if game_id %}
+		<button class="control-button" onclick="startWatchingGame()">
+			Start Watching Game
+		</button>
+		{% else %}
+		<button class="control-button control-button-disabled">
+			No game today
+		</button>
+		{% endif %}
+		<button class="control-button" onclick="manualGoalHorn()">
+			Sound Goal Horn
+		</button>
+	</section>
+
+	<!-- Upcoming games section with detailed format -->
+	<section class="upcoming-games">
+		<h2>Upcoming Games</h2>
+		<ul class="game-list" id="gameList">
+			{% for game in team_schedule %}
+            {% if game.date >= today %}
+			
+			<li class="game-card">
+				<div class="game-details">
+					<span class="game-date">Oct 28, 2023</span>
+					<span class="teams">
+						{% for team in teams if team.team_abbreviation == game.home_team %}
+						<span class="home-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						<span class="vs">vs</span> 
+						{% endfor %}
+						{% for team in teams if team.team_abbreviation == game.away_team %}
+						<span class="away-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						{% endfor %}
+					</span>
+				</div>
+				<a
+					href="https://purchase-tickets.com"
+					target="_blank"
+					class="ticket-link"
+					>Purchase Tickets</a
+				>
+			</li>
+
+			{% endif %}
+			{% endfor %}
+			
+		</ul>
+	</section>
+</div>
+
+{% endblock %}

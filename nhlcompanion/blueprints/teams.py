@@ -36,7 +36,7 @@ def team_page(team):
 
 
     # SET TEAM DATA VALUES IN COOKIES FOR EASY ACCESS
-    res = make_response(render_template('app/team_page.html',
+    res = make_response(render_template('app/test_team_page.html',
                            today = today,
                            teams = teams,
                            team_schedule = team_schedule,

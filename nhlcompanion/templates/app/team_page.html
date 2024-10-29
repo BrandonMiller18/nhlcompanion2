@@ -1,115 +1,130 @@
-{% extends "base.html" %}
-{% block html_title %}{{team_abbreviation}} Goal Horn | NHL Companion{% endblock %}
-{% block meta_desc %}Play {{team_abbreviation}} goal horn! The best hockey goal horn app!{% endblock %}
-{% block html_head %}
+{% extends "base.html" %} {% block html_title %}{{team_abbreviation}} Goal Horn
+| NHL Companion{% endblock %} {% block meta_desc %}Play {{team_abbreviation}}
+goal horn! The best hockey goal horn app!{% endblock %} {% block html_head %}
+<link rel="stylesheet" href="styles.css" />
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+	let slug = (url) => new URL(url).pathname.match(/[^\/]+/g);
+	let user_team = slug(document.location.href);
 
-        if (screen.width > 500) {
-            const cards = document.getElementById("card-wrapper");
-            const distanceToBottom = innerHeight - cards.offsetTop - 50;
-            cards.style.height = distanceToBottom.toString() + 'px';
-            console.log("Height: " + distanceToBottom.toString());
-        }
-    });
-    
-    window.addEventListener('resize', function() {
-
-        if (screen.width > 500) {
-            const cards = document.getElementById("card-wrapper");
-            const distanceToBottom = innerHeight - cards.offsetTop - 50;
-            cards.style.height = distanceToBottom.toString() + 'px';
-            console.log("Resized to: " + distanceToBottom.toString());
-        }
-
-    });
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		user_team: user_team[1],
+	});
 </script>
 
 <script>
-
-    let slug = url => new URL(url).pathname.match(/[^\/]+/g);
-    let user_team = slug(document.location.href);
-
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        'user_team': user_team[1],
-    });
-
-
+	
+	$("input").change(function(){
+		console.log("changed");
+	});
 </script>
 
-{% endblock %}
+<script>
+	// JavaScript functions
+	function startWatchingGame() {
+		// Function to start watching the game
+		console.log(
+			"Started watching the game with delay:",
+			document.getElementById("streamDelay").value
+		);
+	}
 
-{% block content %}
+	function manualGoalHorn() {
+		var goalHorn = new Audio('/static/sounds/' + team_abbreviation.toLowerCase() + '.mp3');
+		goalHorn.play();
+	}
+</script>
 
-<div class="main">
-    <div>
-        <a class="go-back" href=" {{ url_for('teams.pick_team') }} ">&#8592; Go back</a>
-    </div>
-    <div class="title">
-        {% for team in teams if team.team_abbreviation == team_abbreviation %}
-        <h1>{{ team.team_city }} {{ team.team_name }}</h1>
-        {% endfor %}
-    </div>
-    <div class="card-wrapper stacked">
-        {% if game_id %}
-        <div class="card">
-            <h3>Set stream delay</h3>
-            <p>The amount of time the app will pause before playing the goal horn.
-                Tweak this value to work with your stream.</p>
-            <form action="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" method="post">
-                <input name="stream-delay" type="number" value="10">
-        </div>
-            <input type="submit" href="#" class="start-app" value="START APP">
-        </form>
-        {% else %}
-        <div class="card no-game">
-            <h3>No game today</h3>
-        </div>
-        <p class="no-game">Come back on a day your team plays to use the NHL Companion goal horn app. It's cool, I promise.</p>
-        {% endif %}
-    </div>
-    <div id="card-wrapper" class="card-wrapper">
-        <!-- <div class="card flex-2">
-            <h2>Team Leaders</h2>
-        </div> -->
-        <div class="card">
+{% endblock %} {% block content %}
+<div class="dashboard">
+	<!-- Header with team name and logo -->
+	<header class="header">
+		{% for team in teams if team.team_abbreviation == team_abbreviation %}
+		<img src="{{ team.logo }}" alt="Team Logo" class="team-logo" id="teamLogo" />
+		<h1 class="team-name" id="teamName">{{ team.team_city }} {{ team.team_name }} Goal Horn</h1>
+		{% endfor %}
+	</header>
+	<!-- How to Use Instructions -->
+	<section class="instructions">
+		<h2>Configure the NHL Companion</h2>
+		<p>
+			To get started, set the "Stream Delay" to match any delay on your video
+			feed. Then, press "Start Watching Game" to enable goal tracking.
+		</p>
+		<p>
+			<strong>Note:</strong> If your browser goes to sleep, the goal horn may
+			not sound. Keep this tab open and active for the best experience.
+		</p>
+	</section>
 
-            {% for team in teams if team.team_abbreviation == team_abbreviation %}
-            <h2>{{ team.team_name }} Upcoming Schedule</h2>
-            {% endfor %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Home</th>
-                        <th>Away</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    {% for game in team_schedule %}
-                    {% if game.date >= today %}
-                    <tr>
-                        {% for team in teams if team.team_abbreviation == game.home_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endfor %}
-                        {% for team in teams if team.team_abbreviation == game.away_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endfor %}
-                        
-                        <td>{{ game.date.strftime('%b %d, %Y') }}</td>
-                        <td><a href="{{ game.tickets_link }}" target="_blank">Tickets</a></td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+	<!-- User controls for streaming delay and goal horn -->
+	<section class="controls">
+		<div class="control-group">
+			<label for="streamDelay">Stream Delay:</label>
+			<input
+				type="number"
+				id="streamDelay"
+				name="streamDelay"
+				min="1" max="30"
+				placeholder="Seconds"
+			/>
+		
+		</div>
 
-        </div>
+		<div class="control-group">
+			{% if game_id %}
+			<a href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" class="control-button" onclick="startWatchingGame()">
+				Start Watching Game
+			</a>
+			{% else %}
+			<button class="control-button control-button-disabled">
+				No game today
+			</button>
+			{% endif %}
+			<button class="control-button" onclick="manualGoalHorn()">
+				Sound Goal Horn
+			</button>
+		</div>
+	</section>
 
-    </div>
+	<!-- Upcoming games section with detailed format -->
+	<section class="upcoming-games">
+		<h2>Upcoming Games</h2>
+		<ul class="game-list" id="gameList">
+			{% for game in team_schedule %}
+            {% if game.date >= today %}
+			
+			<div class="game-card">
+				<div class="game-details">
+					<span class="game-date">{{ game.date.strftime('%b %d, %Y') }}</span>
+					<span class="teams">
+						{% for team in teams if team.team_abbreviation == game.home_team %}
+						<span class="home-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						<span class="vs">vs</span> 
+						{% endfor %}
+						{% for team in teams if team.team_abbreviation == game.away_team %}
+						<span class="away-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						{% endfor %}
+					</span>
+				</div>
+				
+				<div class="game-card-cta">
+					<a
+						href="{{game.tickets_link}}"
+						target="_blank"
+						class="ticket-link"
+						><i class="fa-solid fa-xl fa-ticket"></i></a
+					>
+				</div>
+			</div>
+
+			{% endif %}
+			{% endfor %}
+			
+		</ul>
+	</section>
 </div>
 
 {% endblock %}

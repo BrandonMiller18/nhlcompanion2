@@ -41,8 +41,9 @@ body {
 }
 
 .instructions p {
-    font-size: 0.9em;
+    font-size: 1em;
     line-height: 1.4;
+    padding: 10px;
 }
 
 /* Header */
@@ -68,17 +69,26 @@ body {
 /* Controls Section */
 .controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row wrap;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
 }
 
+.control-group {
+    display: flex;
+    flex-flow: row;
+    gap: 10px;
+    align-items: center;
+}
+
 label {
-    font-size: 0.9em;
+    font-size: 1em;
+    padding: 10px 10px 10px 0;
 }
 
 input[type="number"] {
-    padding: 8px;
+    padding: 10px;
     font-size: 1em;
     border: 1px solid #555;
     border-radius: 4px;
@@ -90,6 +100,7 @@ input[type="number"] {
     padding: 10px;
     font-size: 1em;
     font-weight: bold;
+    text-decoration: none;
     color: #fff;
     background-color: #007acc;
     border: none;
@@ -127,15 +138,32 @@ input[type="number"] {
     padding: 15px;
     border-radius: 6px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
     margin-bottom: 10px;
+    transition: 0.2s ease, box-shadow 0.2s ease;
+    outline: rgba(0, 0, 0, 0.3) solid 0px;
+}
+
+.game-card:hover {
+    /* animation: ticket-waggle 0.2s 0.5s infinite; */
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    outline: rgba(0, 0, 0, 0.3) solid 1px;
 }
 
 .game-details {
     display: flex;
     flex-direction: column;
+    width: 75%;
     gap: 4px;
+}
+
+.game-card-cta {
+    align-self: center;
+    text-align: right;
+    margin-right: 5%;
+    flex-grow: 1;
 }
 
 .game-date {
@@ -149,13 +177,22 @@ input[type="number"] {
 }
 
 .ticket-link {
-    color: #1e90ff;
     text-decoration: none;
-    font-size: 0.9em;
+    gap: 5px;
+    color: #fff;
 }
 
-.ticket-link:hover {
-    text-decoration: underline;
+.ticket-link i {
+    color: #fff;
+    font-size: 1.4em;
+    transform: rotate(-10deg);
+    transition: 0.2s ease, box-shadow 0.2s ease;
+    height: 75%;
+}
+
+.ticket-link i:hover {
+    transform: scale(1.5) rotate(-45deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Desktop Layout */
@@ -263,7 +300,7 @@ body {
 }
 
 .intro h1 {
-    font-size: 2em;
+    font-size: 2.5em;
     margin-bottom: 10px;
 }
 
@@ -281,7 +318,7 @@ body {
 }
 
 .team-selection h2 {
-    font-size: 1.5em;
+    font-size: 1.8em;
     margin-bottom: 15px;
 }
 
@@ -309,7 +346,155 @@ body {
 }
 
 .team-logo img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 4px;
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e1e1e;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Shared Container Style */
+.container {
+    background-color: #2a2a2a;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Scoreboard Page Styles */
+.scoreboard-main {
+    margin-bottom: 30px;
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.team img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.score {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.game-info {
+    font-size: 1em;
+    margin-top: 15px;
+}
+
+/* Toast Notification Styles */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #444;
+    color: #fff;
+    width: 90%;
+    max-width: 500px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.toast-notification.show {
+    opacity: 0.8;
+    visibility: visible;
+}
+
+.toast-content {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+}
+
+.player-headshot {
+    width: 100px;
+    height: 100px;
+    border-radius: 75%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.team-logo-toast {
+    width: 100px;
+    height: 100px;
+
+    object-fit: contain;
+    position: absolute;
+    top: -25%;
+    left: 92%;
+
+}
+
+.toast-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.toast-details .header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+
+.player-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #f9f9f9;
+    background-color: #2a2a2a;
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.play-type {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #f9f9f9;
 }

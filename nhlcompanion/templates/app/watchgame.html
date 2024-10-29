@@ -8,33 +8,79 @@
 
 <script src="{{ url_for('static', filename='js/watchgame.js') }}"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        function showToast(playType, team, player, playerHeadshot, teamLogo) {
+          const toast = document.getElementById('toast');
+      
+          if (toast) {
+            toast.querySelector('.play-type').textContent = playType;
+            toast.querySelector('.player-name').textContent = player;
+            toast.querySelector('.player-headshot').src = playerHeadshot;
+            toast.querySelector('.team-logo-toast').src = teamLogo;
+      
+            // Show the toast with the 'show' class
+            toast.classList.add('show');
+      
+            //Fade out after 3 seconds
+            setTimeout(() => {
+            toast.classList.remove('show');
+            }, 3000);
+          }
+        }
+      
+        // Example usage (you can replace with real data)
+        showToast('Goal', 'Away Team', 'Robert Thomas', 'https://a.espncdn.com/combiner/i?img=/i/headshots/nhl/players/full/4233637.png&w=350&h=254', "{{ away_team['logo'] }}");
+      });
+      
+  </script>
+
 {% endblock %}
 
 {% block content %}
 
-<div class="main">
-    <div>
-        <a class="go-back" href=" {{ url_for('teams.pick_team') }} ">&#8592; Go back</a>
-    </div>
-    <div class="clock">
-        <div><h4 id="period-label">Period</h4><span id="period"></span></div>
-        <div id="time-div"><h4 id="time-label">Time Remaining</h4><span id="time"></span></div>
-    </div>
-    <div id="scoreboard" class="scoreboard">
-        <div class="away-team">
-            <!-- <h2>Away Team</h2> -->
-            <img src="{{ away_team['logo'] }}" alt="">
-            <h3>{{ away_team['name']['default'] }}</h3>
-            <p id="away-score">Getting scores...</p>
+  <div class="container scoreboard">
+    <!-- Main Scoreboard Section -->
+    <section class="scoreboard-main">
+      <div class="team-info">
+        <div class="team home-team">
+          <img src="{{ home_team['logo'] }}" alt="Home Team Logo">
+          <p>Home</p>
         </div>
-        <div>@</div>
-        <div class="home-team">
-            <!-- <h2>Home Team</h2> -->
-            <img src="{{ home_team['logo'] }}" alt="">
-            <h3>{{ home_team['name']['default'] }}</h3>
-            <p id="home-score">Getting scores...</p>
+        <div class="score">
+          <span id="home-score" class="home-score"><img src="test.png" alt=""></span> - <span id="away-score" class="away-score"><img src="test.png" alt=""></span>
+        </div>
+        <div class="team away-team">
+          <img src="{{ away_team['logo'] }}" alt="Away Team Logo">
+          <p>Away</p>
+        </div>
+      </div>
+      <div class="game-info">
+        <p id="period-label">Period</p><p id="period"></p>
+        <p id="time-div"><span id="time-label">Time Remaining: </span><span id="time">10:42</span></p>
+      </div>
+    </section>
+
+    <!-- Toast Notification for New Play -->
+    <div class="toast-notification" id="toast">
+        <img src="team-logo-placeholder.png" alt="Team Logo" class="team-logo-toast">
+        <img src="player-headshot-placeholder.png" alt="Player Headshot" class="player-headshot">
+        <div class="toast-content">
+          <div class="toast-details">
+              <p class="player-name">John Doe</p>
+              <p class="play-type">Goal</p>
+          </div>
         </div>
     </div>
-</div>
+      
+    
+  </div>
+
+
+
+
+
+
+
 
 {% endblock %}

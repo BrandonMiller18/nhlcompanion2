@@ -23,7 +23,7 @@ def index():
     conferences = []
     [conferences.append(y) for y in x if y not in conferences]
 
-    return render_template('test_index.html',
+    return render_template('index.html',
                            teams = teams,
                            todays_schedule = todays_schedule,
                            standings = standings,

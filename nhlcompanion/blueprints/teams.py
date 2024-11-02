@@ -40,6 +40,6 @@ def team_page(team):
                            team_abbreviation = team,
                            game_id = game_id if game_id else None
                            ))
-    res.set_cookie('team', team)
+    res.set_cookie('nhlc_team', team)
     
     return res

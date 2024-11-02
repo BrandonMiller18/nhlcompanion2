@@ -1,11 +1,12 @@
-// the game_id and user's team are set in the HTML as meta tags
-// get the data from the meta tags and assign them to variables
-var gameIdMeta = document.getElementById('game_id');
-var game_id = gameIdMeta.getAttribute('data');
-var userTeamMeta = document.getElementById('user_team');
-var userTeam = userTeamMeta.getAttribute('data'); 
-var streamDelayMeta = document.getElementById('stream_delay');
-var streamDelay = streamDelayMeta.getAttribute('data') * 1000; 
+let slug = (url) => new URL(url).pathname.match(/[^\/]+/g);
+var game_id = slug(document.location.href)[2];
+
+// set variables from cookies
+var gameIdMeta = getCookie("nhlc_game_id")
+var userTeam = getCookie("nhlc_team");
+var streamDelay = getCookie("nhlc_stream_delay");
+var haWebhook = getCookie("nhlc_haWebhook");
+$.post(haWebhook);
 
 // set the goal horn file
 var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');
@@ -23,11 +24,11 @@ function getGameData() {
     let gameData = $.ajax({
         type: "POST",
         url: "/watch-game/_update-score/" + game_id,
-        success: function(){
+        success: function () {
             console.log("UPDATED SCORES");
             // if game over is false, run these functions, if true, do nothing
             if (!gameOver) {
-                setTimeout(function() {
+                setTimeout(function () {
                     let newGameData = getGameData();
                     updateScore(newGameData);
                 }, interval); // run this function at the determined interval based on game state
@@ -41,7 +42,7 @@ function getGameData() {
     let res = gameData.responseJSON;
 
     return res;
-};   
+};
 
 function updateScore(gameData) {
 
@@ -55,11 +56,11 @@ function updateScore(gameData) {
                 $('#period').html("GAME NOT STARTED<br>Data is automatically refreshed every 30 minutes.");
                 $('#time-div').hide();
                 // if not started, check API every 30 minutes
-                interval = 1800000; 
+                interval = 1800000;
             } else if (gameData.gameState == "PRE") {
                 $('#period').html("GAME ABOUT TO START<br>Data is automatically refreshed every 2 minutes.");
                 // if pregame, check API every 2 minutes
-                interval = 120000; 
+                interval = 120000;
             } else {
                 $('#period').html("GAME OVER");
                 $('#time-div').hide();
@@ -91,49 +92,51 @@ function updateScore(gameData) {
     // get period to display
     let displayPeriod = gameData.displayPeriod;
 
-        if (isIntermission) {
-            // if intermission, check only every 2 minutes
-            interval = 120000;
-            switch (displayPeriod) {
-                case 1:
-                    $('#period').html("1st Intermission");
-                case 2:
-                    $('#period').html("2nd Intermission");
-            }
-        } else if (gameData.gameState == "PRE" || gameData.gameState == "FUT" ) {
-            console.log("pass")
-        } else {
-            interval = 3000;
-            $('#period').html(displayPeriod);
-        };
+    if (isIntermission) {
+        // if intermission, check only every 2 minutes
+        interval = 120000;
+        switch (displayPeriod) {
+            case 1:
+                $('#period').html("1st Intermission");
+            case 2:
+                $('#period').html("2nd Intermission");
+        }
+    } else if (gameData.gameState == "PRE" || gameData.gameState == "FUT") {
+        console.log("pass")
+    } else {
+        interval = 3000;
+        $('#period').html(displayPeriod);
+    };
 
     // set the clock time 
     $('#time').html(gameData.clock.timeRemaining);
 
     // check if new score is different from old score
     // if it is, change it -- also checks if user_team for goal horn
-    if (newHomeScore != homeScore ) {
-        setTimeout(function() {
+    if (newHomeScore != homeScore) {
+        setTimeout(function () {
             $('#home-score').html(newHomeScore);
             console.log("Home team score update");
             if (newHomeScore > homeScore) {
                 console.log("Home team scores");
-            if (userTeam == gameData.homeTeam.abbrev) {
-                goalHorn.play();
-            };
+                if (userTeam == gameData.homeTeam.abbrev) {
+                    goalHorn.play();
+                    $.post(haWebhook);
+                };
             };
         }, streamDelay);
     };
 
     if (newAwayScore != awayScore) {
-        setTimeout(function() {
+        setTimeout(function () {
             $('#away-score').html(newAwayScore);
             console.log("Away team score update");
             if (newAwayScore > awayScore) {
                 console.log("Away team scores");
-            if (userTeam == gameData.awayTeam.abbrev) {
-                goalHorn.play();
-            };
+                if (userTeam == gameData.awayTeam.abbrev) {
+                    goalHorn.play();
+                    $.post(haWebhook);
+                };
             };
         }, streamDelay);
     };
@@ -141,9 +144,8 @@ function updateScore(gameData) {
     console.log("Refreshing data every: " + interval / 1000 + " seconds");
 }
 
-
-   // when document loads, get the initial game data then run the update_score function
-$(document).ready(function() {
+// when document loads, get the initial game data then run the updateScore function
+$(document).ready(function () {
     // get initial data to set game state, etc...
     let gameData = getGameData();
 

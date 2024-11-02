@@ -1,10 +1,9 @@
-/* Test from chatgpt */
 /* Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica, sans-serif;
 }
 
 body {
@@ -69,17 +68,47 @@ body {
 /* Controls Section */
 .controls {
     display: flex;
-    flex-direction: row wrap;
+    flex-direction: column;
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.control-group {
+.control-group-config {
+    flex: 1;
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     gap: 10px;
     align-items: center;
+}
+
+.control-group-config>div {
+    display: flex;
+    width: 100%;
+}
+
+.control-group-config input:not([type="checkbox"]) {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #2a2a2a;
+    color: #fff;
+    width: 100%;
+}
+
+.control-group-buttons {
+    display: flex;
+    flex: 1;
+    flex-flow: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.control-group-buttons>* {
+    flex: 1;
+    height: 100%;
+    width: 100%;
 }
 
 label {
@@ -87,26 +116,29 @@ label {
     padding: 10px 10px 10px 0;
 }
 
-input[type="number"] {
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #555;
-    border-radius: 4px;
-    background-color: #2a2a2a;
-    color: #fff;
-}
 
 .control-button {
     padding: 10px;
     font-size: 1em;
+    flex: 1;
+    white-space: nowrap;
     font-weight: bold;
     text-decoration: none;
+    text-align: center;
     color: #fff;
     background-color: #007acc;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.control-button.disable-goal-horn {
+    background-color: #630000;
+}
+
+.control-button.disable-goal-horn:hover {
+    background-color: #4f0000;
 }
 
 .control-button-disabled {
@@ -146,7 +178,6 @@ input[type="number"] {
 }
 
 .game-card:hover {
-    /* animation: ticket-waggle 0.2s 0.5s infinite; */
     transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     outline: rgba(0, 0, 0, 0.3) solid 1px;
@@ -234,66 +265,6 @@ input[type="number"] {
     }
 }
 
-
-/* homepage */
-
-/* Base Styles (Shared across both pages) */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #1e1e1e;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* General Container Style */
-.container {
-    background-color: #2a2a2a;
-    width: 100%;
-    max-width: 900px;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Homepage Specific Styles */
-/* Base Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
-
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #1e1e1e;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.container {
-    background-color: #2a2a2a;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
 /* Introduction Section */
 .intro {
     margin-bottom: 30px;
@@ -306,7 +277,7 @@ body {
 
 .intro p {
     font-size: 1em;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 /* Team Selection Section */
@@ -352,12 +323,6 @@ body {
 }
 
 /* Base Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
 
 body {
     display: flex;

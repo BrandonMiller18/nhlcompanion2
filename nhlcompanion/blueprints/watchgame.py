@@ -12,7 +12,7 @@ def watchgame(user_team, game_id):
     stream_delay = request.form.get('stream-delay')
 
     r = requests.get(f'https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore')
-    data = json.loads(json.dumps(r.json()))
+    data = r.json()
     
 
 

@@ -1,42 +1,96 @@
-{% extends "base.html" %} {% block html_title %}{{team_abbreviation}} Goal Horn
-| NHL Companion{% endblock %} {% block meta_desc %}Play {{team_abbreviation}}
-goal horn! The best hockey goal horn app!{% endblock %} {% block html_head %}
-<link rel="stylesheet" href="styles.css" />
-
-<script>
-	let slug = (url) => new URL(url).pathname.match(/[^\/]+/g);
-	let user_team = slug(document.location.href);
-
-	window.dataLayer = window.dataLayer || [];
-	window.dataLayer.push({
-		user_team: user_team[1],
-	});
-</script>
+{% extends "base.html" %}
+{% block html_title %}{{team_abbreviation}} Goal Horn | NHL Companion{% endblock %} 
+{% block meta_desc %}Play {{team_abbreviation}} goal horn! The best hockey goal horn app!{% endblock %} 
+{% block html_head %}
 
 <script>
 	
-	$("input").change(function(){
-		console.log("changed");
+	goalHorn = createGoalHorn();
+	function createGoalHorn() {
+		let team = getCookie("nhlc_team");
+		goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
+		console.log(goalHorn)
+		return goalHorn
+	}
+
+	function playGoalHorn() {
+		if (goalHorn) {
+			goalHorn.play();
+		} else {
+			let team = getCookie("nhlc_team");
+			goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
+			goalHorn.play()
+		}
+		
+		goalHornButton = $('#goal-horn');
+		goalHornButton.text("Disable Horn");
+		goalHornButton.attr("onclick","stopGoalHorn()");
+		goalHornButton.addClass("disable-goal-horn");
+		
+	}
+	
+	function stopGoalHorn() {
+		goalHorn.pause();
+		goalHorn = null;
+		
+		goalHornButton = $('#goal-horn');
+		goalHornButton.text("Sound Goal Horn");
+		goalHornButton.attr("onclick","playGoalHorn()");
+		goalHornButton.removeClass("disable-goal-horn");
+	}
+
+
+</script>
+
+<script>
+	let team = getCookie("nhlc_team");
+
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		user_team: team[1],
 	});
 </script>
 
 <script>
-	// JavaScript functions
-	function startWatchingGame() {
-		// Function to start watching the game
-		console.log(
-			"Started watching the game with delay:",
-			document.getElementById("streamDelay").value
-		);
-	}
 
-	function manualGoalHorn() {
-		var goalHorn = new Audio('/static/sounds/' + team_abbreviation.toLowerCase() + '.mp3');
-		goalHorn.play();
+	
+	function gatherCookies() {
+		homeAssistantWebhook = 'nhlc_haWebhook=' + $('#homeassistant').val();
+		streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
+
+		setCookie(homeAssistantWebhook);
+		setCookie(streamDelay);
 	}
+	
+	
+	$(document).ready(function () {
+		checkbox = $('#enable-homeassistant');
+		homeAssistantWebhook = $('#homeassistant');
+		
+		checkbox.click(function() {
+			if (this.checked) {
+				homeAssistantWebhook.fadeIn()
+			} else {
+				homeAssistantWebhook.hide()
+			}
+
+		})
+
+	})
+
 </script>
 
-{% endblock %} {% block content %}
+<script>
+
+	
+
+</script>
+
+
+{% endblock %}
+
+
+{% block content %}
 <div class="dashboard">
 	<!-- Header with team name and logo -->
 	<header class="header">
@@ -61,21 +115,40 @@ goal horn! The best hockey goal horn app!{% endblock %} {% block html_head %}
 
 	<!-- User controls for streaming delay and goal horn -->
 	<section class="controls">
-		<div class="control-group">
-			<label for="streamDelay">Stream Delay:</label>
-			<input
-				type="number"
-				id="streamDelay"
-				name="streamDelay"
-				min="1" max="30"
-				placeholder="Seconds"
-			/>
+		<div class="control-group-config">
+			<div>
+				<input
+					type="number"
+					id="streamDelay"
+					name="streamDelay"
+					min="1" max="30"
+					placeholder="Stream delay"
+					aria-label="Input stream delay in seconds"
+				/>
+			</div>
+
+			<div>
+				<label for="enable-homeassistant">Enable HA Webhooks</label>
+				<input type="checkbox" id="enable-homeassistant">
+			</div>
+
+			<div>
+				<input 
+				type="text" 
+				id="homeassistant" 
+				placeholder="HA webhook"
+				aria-label="Input HA webhook"
+				hidden>
+			</div>
 		
 		</div>
 
-		<div class="control-group">
+		<div class="control-group-buttons">
 			{% if game_id %}
-			<a href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" class="control-button" onclick="startWatchingGame()">
+			<a
+			href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}"
+			class="control-button" 
+			onclick="gatherCookies()">
 				Start Watching Game
 			</a>
 			{% else %}
@@ -83,7 +156,7 @@ goal horn! The best hockey goal horn app!{% endblock %} {% block html_head %}
 				No game today
 			</button>
 			{% endif %}
-			<button class="control-button" onclick="manualGoalHorn()">
+			<button id="goal-horn" class="control-button" onclick="playGoalHorn()">
 				Sound Goal Horn
 			</button>
 		</div>

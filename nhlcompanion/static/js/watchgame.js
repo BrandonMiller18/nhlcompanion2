@@ -5,8 +5,9 @@ var game_id = slug(document.location.href)[2];
 var gameIdMeta = getCookie("nhlc_game_id")
 var userTeam = getCookie("nhlc_team");
 var streamDelay = getCookie("nhlc_stream_delay");
-var haWebhook = getCookie("nhlc_haWebhook");
-$.post(haWebhook);
+var enableWebhook = getCookie("nhlc_enable_webhook");
+var webhook = getCookie("nhlc_webhook");
+$.post(webhook);
 
 // set the goal horn file
 var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');

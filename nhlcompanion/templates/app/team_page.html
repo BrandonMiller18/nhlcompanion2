@@ -54,24 +54,41 @@
 <script>
 
 	
-	function gatherCookies() {
-		homeAssistantWebhook = 'nhlc_haWebhook=' + $('#homeassistant').val();
+	function setCookies() {
+		webhook = 'nhlc_webhook=' + $('#webhook').val();
 		streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
 
-		setCookie(homeAssistantWebhook);
+		setCookie(webhook);
 		setCookie(streamDelay);
 	}
 	
 	
 	$(document).ready(function () {
-		checkbox = $('#enable-homeassistant');
-		homeAssistantWebhook = $('#homeassistant');
+		let enableWebhookCookie = getCookie("nhlc_enable_webhook");
+		let webhookCookie = getCookie("nhlc_webhook");
+		let streamDelayCookie = getCookie("nhlc_stream_delay");
+	
+		let streamDelay = $('#streamDelay');
+		let checkbox = $('#enable-webhook');
+		let webhook = $('#webhook');
+
+		if (webhookCookie && enableWebhookCookie == 'true') {
+			checkbox.prop('checked', true);
+			webhook.show();	
+			webhook.val(webhookCookie);
+		}
+
+		if (streamDelayCookie) {
+			streamDelay.val(streamDelayCookie);
+		}
 		
 		checkbox.click(function() {
 			if (this.checked) {
-				homeAssistantWebhook.fadeIn()
+				webhook.fadeIn();
+				setCookie('nhlc_enable_webhook=true');
 			} else {
-				homeAssistantWebhook.hide()
+				webhook.hide();
+				setCookie('nhlc_enable_webhook=false');
 			}
 
 		})
@@ -102,12 +119,19 @@
 	<!-- How to Use Instructions -->
 	<section class="instructions">
 		<h2>Configure the NHL Companion</h2>
+		<h3 class="feature-callout">Set the stream delay</h3>
 		<p>
 			To get started, set the "Stream Delay" to match any delay on your video
 			feed. Then, press "Start Watching Game" to enable goal tracking.
 		</p>
+		<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
 		<p>
-			<strong>Note:</strong> If your browser goes to sleep, the goal horn may
+			Enter the webhook for your service (Home Assistant, for example) and a
+			POST request will be sent to the webhook when a goal is scored!
+		</p>
+		<h3 class="feature-callout">Keep your browser awake</h3>
+		<p>
+			If your browser goes to sleep, the goal horn may
 			not sound. Keep this tab open and active for the best experience.
 		</p>
 	</section>
@@ -116,7 +140,8 @@
 	<!-- User controls for streaming delay and goal horn -->
 	<section class="controls">
 		<div class="control-group-config">
-			<div>
+			<div class="stream-delay-control">
+				<label for="streamDelay">Stream delay</label>
 				<input
 					type="number"
 					id="streamDelay"
@@ -128,16 +153,16 @@
 			</div>
 
 			<div>
-				<label for="enable-homeassistant">Enable HA Webhooks</label>
-				<input type="checkbox" id="enable-homeassistant">
+				<label for="enable-webhook">Enable Webhooks</label>
+				<input type="checkbox" id="enable-webhook">
 			</div>
 
 			<div>
 				<input 
 				type="text" 
-				id="homeassistant" 
-				placeholder="HA webhook"
-				aria-label="Input HA webhook"
+				id="webhook" 
+				placeholder="Webhook: https://..."
+				aria-label="Input full webhook url"
 				hidden>
 			</div>
 		
@@ -148,7 +173,7 @@
 			<a
 			href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}"
 			class="control-button" 
-			onclick="gatherCookies()">
+			onclick="setCookies()">
 				Start Watching Game
 			</a>
 			{% else %}

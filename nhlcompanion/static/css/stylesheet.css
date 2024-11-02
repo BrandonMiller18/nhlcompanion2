@@ -35,14 +35,23 @@ body {
 }
 
 .instructions h2 {
-    font-size: 1.4em;
-    margin-bottom: 10px;
+    font-size: 1.6em;
+    margin-bottom: 15px;
 }
 
 .instructions p {
     font-size: 1em;
     line-height: 1.4;
     padding: 10px;
+}
+
+.instructions .feature-callout {
+    font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+    background-color: #2a2a2a;
+    outline: #005f99 solid 1px;
+    border-radius: 5px;
 }
 
 /* Header */
@@ -85,6 +94,14 @@ body {
 .control-group-config>div {
     display: flex;
     width: 100%;
+}
+
+.control-group-config>.stream-delay-control {
+    flex-flow: column;
+}
+
+.control-group-config>.stream-delay-control>label {
+    font-size: 10px;
 }
 
 .control-group-config input:not([type="checkbox"]) {
@@ -262,6 +279,10 @@ label {
 
     .game-card {
         padding: 20px;
+    }
+
+    .instructions .feature-callout {
+        width: max-content;
     }
 }
 

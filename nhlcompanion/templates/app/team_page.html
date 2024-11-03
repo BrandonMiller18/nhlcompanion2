@@ -9,7 +9,6 @@
 	function createGoalHorn() {
 		let team = getCookie("nhlc_team");
 		goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
-		console.log(goalHorn)
 		return goalHorn
 	}
 
@@ -122,7 +121,8 @@
 		<h3 class="feature-callout">Set the stream delay</h3>
 		<p>
 			To get started, set the "Stream Delay" to match any delay on your video
-			feed. Then, press "Start Watching Game" to enable goal tracking.
+			feed. Then, press "Start Watching Game" to enable goal tracking. Changes are 
+			coming soon to improve timing!
 		</p>
 		<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
 		<p>

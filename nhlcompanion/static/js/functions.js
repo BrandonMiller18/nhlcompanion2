@@ -20,3 +20,9 @@ function getCookie(name) {
     // Return null if the cookie is not found
     return null;
 }
+
+
+function webhookRequest(webhook, payload) {
+    let enableWebhook = getCookie("nhlc_enable_webhook");
+    if (enableWebhook == "true") { $.post(webhook, payload); }
+}

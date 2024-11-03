@@ -5,9 +5,8 @@ var game_id = slug(document.location.href)[2];
 var gameIdMeta = getCookie("nhlc_game_id")
 var userTeam = getCookie("nhlc_team");
 var streamDelay = getCookie("nhlc_stream_delay");
-var enableWebhook = getCookie("nhlc_enable_webhook");
 var webhook = getCookie("nhlc_webhook");
-$.post(webhook);
+// webhookRequest(webhook, null);
 
 // set the goal horn file
 var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');
@@ -26,7 +25,6 @@ function getGameData() {
         type: "POST",
         url: "/watch-game/_update-score/" + game_id,
         success: function () {
-            console.log("UPDATED SCORES");
             // if game over is false, run these functions, if true, do nothing
             if (!gameOver) {
                 setTimeout(function () {
@@ -34,7 +32,7 @@ function getGameData() {
                     updateScore(newGameData);
                 }, interval); // run this function at the determined interval based on game state
             } else {
-                console.log("Game is over! :)")
+                console.log("NHL Companion: game is over")
             };
         },
         async: false
@@ -49,7 +47,8 @@ function updateScore(gameData) {
 
     // if game is not live, break function, do not send AJAX call, set scores
     if (gameData) {
-        if (gameData.gameState != "LIVE") {
+        const liveGameStates = ["LIVE", "CRIT"];
+        if (!(liveGameStates.includes(gameData.gameState))) {
             $('#home-score').html(gameData.homeTeam.score);
             $('#away-score').html(gameData.awayTeam.score);
             $('#period-label').hide();
@@ -69,6 +68,9 @@ function updateScore(gameData) {
                 return;
             };
             $('#time-div').hide();
+        } else {
+            $('#period-label').show();
+            $('#time-div').show();
         };
     };
 
@@ -103,7 +105,7 @@ function updateScore(gameData) {
                 $('#period').html("2nd Intermission");
         }
     } else if (gameData.gameState == "PRE" || gameData.gameState == "FUT") {
-        console.log("pass")
+        console.log("game not started")
     } else {
         interval = 3000;
         $('#period').html(displayPeriod);
@@ -117,12 +119,10 @@ function updateScore(gameData) {
     if (newHomeScore != homeScore) {
         setTimeout(function () {
             $('#home-score').html(newHomeScore);
-            console.log("Home team score update");
             if (newHomeScore > homeScore) {
-                console.log("Home team scores");
                 if (userTeam == gameData.homeTeam.abbrev) {
                     goalHorn.play();
-                    $.post(haWebhook);
+                    webhookRequest(webhook, null);
                 };
             };
         }, streamDelay);
@@ -131,18 +131,16 @@ function updateScore(gameData) {
     if (newAwayScore != awayScore) {
         setTimeout(function () {
             $('#away-score').html(newAwayScore);
-            console.log("Away team score update");
             if (newAwayScore > awayScore) {
-                console.log("Away team scores");
                 if (userTeam == gameData.awayTeam.abbrev) {
                     goalHorn.play();
-                    $.post(haWebhook);
+                    webhookRequest(webhook, null);
                 };
             };
         }, streamDelay);
     };
 
-    console.log("Refreshing data every: " + interval / 1000 + " seconds");
+    console.log("NHL Companion: checking every: " + interval / 1000 + " seconds");
 }
 
 // when document loads, get the initial game data then run the updateScore function

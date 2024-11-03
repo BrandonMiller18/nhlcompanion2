@@ -47,8 +47,8 @@ body {
 
 .instructions .feature-callout {
     font-weight: bold;
-    padding: 5px;
-    margin-top: 5px;
+    padding: 8px;
+    margin: 5px;
     background-color: #2a2a2a;
     outline: #005f99 solid 1px;
     border-radius: 5px;

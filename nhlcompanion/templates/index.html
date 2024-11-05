@@ -1,58 +1,40 @@
-{% extends "base.html" %} {% block html_title %}NHL Goal Horn App | NHL
-Companion{% endblock %} {% block meta_desc %}Try the NHL Companion app today!
-Select your team and sound the goal horn automatically when your team scores!{%
-endblock %} {% block html_head %}
+{% extends "base.html" %} 
+{% block html_title %}NHL Goal Horn App | NHL Companion{% endblock %} 
+{% block meta_desc %}Try the NHL Companion app today!Select your team and sound the goal horn automatically when your team scores!{% endblock %} 
 
-<script>
-	document.addEventListener("DOMContentLoaded", function () {
-		const cards = document.getElementById("card-wrapper");
-		const distanceToBottom = innerHeight - cards.offsetTop - 50;
-		cards.style.height = distanceToBottom.toString() + "px";
-		console.log("Height: " + distanceToBottom.toString());
-	});
 
-	window.addEventListener("resize", function () {
-		const cards = document.getElementById("card-wrapper");
-		const distanceToBottom = innerHeight - cards.offsetTop - 50;
-		cards.style.height = distanceToBottom.toString() + "px";
-		console.log("Resized to: " + distanceToBottom.toString());
-	});
-</script>
+{% block html_head %}
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nhlcompanion.com/" />
+{% endblock %}
 
-<script>
-	function selected() {
-		let el = $("#pick-team");
-		el.addClass("selected");
 
-		let h1 = $("#title");
-		h1.addClass("fade-out");
-	}
-</script>
+{% block content %}
+    <div class="container homepage">
+      <!-- Introduction Section -->
+      <section class="intro">
+        <h1>Welcome to NHL Companion</h1>
+        <p>NHL Companion is the ultimate tool for hockey fans! This web application
+          automatically plays your favorite NHL team's goal horn whenever they
+          score, bringing the excitement of live hockey right to your device. With
+          real-time updates and authentic NHL Goal Horn sounds, you'll never miss a
+          goal celebration. Whether you're watching the game or on the go, the NHL
+          Companion is a must-have for die-hard fans.</p>
+      </section>
+  
+      <!-- Team Selection Overlay -->
+      <section class="team-selection">
+        <h2>Select Your Team</h2>
+        <div class="team-grid">
+          <!-- Placeholder logos for teams -->
+          {% for team in teams %}
+          <div class="team-logo" onclick="selectTeam('team1')">
+            <a href="{{ url_for('teams.team_page', team=team.team_abbreviation) }}"><img src="{{ team.logo }}" alt="Team 1 Logo"></a>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
 
-{% endblock %} {% block content %}
-
-<div class="main">
-	<div id="title" class="title">
-		<h1>NHL Companion</h1>
-		<p>
-			NHL Companion is the ultimate tool for hockey fans! This web application
-			automatically plays your favorite NHL team's goal horn whenever they
-			score, bringing the excitement of live hockey right to your device. With
-			real-time updates and authentic NHL Goal Horn sounds, you'll never miss a
-			goal celebration. Whether you're watching the game or on the go, the NHL
-			Companion is a must-have for die-hard fans.
-		</p>
-	</div>
-
-	<section id="card-wrapper">
-		<a
-			id="pick-team"
-			href="javascript:setTimeout(()=>{window.location = '{{ url_for('teams.pick_team') }}' },1000);"
-			class="start"
-			onclick="selected()"
-			>Pick your team</a
-		>
-	</section>
-</div>
 
 {% endblock %}

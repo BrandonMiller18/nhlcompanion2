@@ -1,115 +1,271 @@
 {% extends "base.html" %}
-{% block html_title %}{{team_abbreviation}} Goal Horn | NHL Companion{% endblock %}
-{% block meta_desc %}Play {{team_abbreviation}} goal horn! The best hockey goal horn app!{% endblock %}
+{% block html_title %}{{team_abbreviation}} Goal Horn | NHL Companion{% endblock %} 
+{% block meta_desc %}Play {{team_abbreviation}} goal horn! The best hockey goal horn app!{% endblock %} 
 {% block html_head %}
+{% for team in teams if team.team_abbreviation == team_abbreviation %}
+<meta property="og:image" content="{{team.logo}}" />
+<meta property="og:title" content="Automatically play the {{team.team_name}} goal horn!" />
+<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "SportsTeam",
+	  "name": "{{ team.team_city }} {{ team.team_name }}",
+	  "sport": "Ice Hockey",
+	  "memberOf": [
+		{
+		  "@type": "SportsOrganization",
+		  "name": "National Hockey League"
+		}
+	  ]
+	}
+</script>
+{% endfor %}
+
+<link rel="canonical" href="https://www.nhlcompanion.com/start/{{team_abbreviation}}"> />
+<meta name="robots" content="index, follow">
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+	
+	goalHorn = createGoalHorn();
+	function createGoalHorn() {
+		let team = getCookie("nhlc_team");
+		goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
+		return goalHorn
+	}
 
-        if (screen.width > 500) {
-            const cards = document.getElementById("card-wrapper");
-            const distanceToBottom = innerHeight - cards.offsetTop - 50;
-            cards.style.height = distanceToBottom.toString() + 'px';
-            console.log("Height: " + distanceToBottom.toString());
-        }
-    });
-    
-    window.addEventListener('resize', function() {
+	function playGoalHorn() {
+		if (goalHorn) {
+			goalHorn.play();
+		} else {
+			let team = getCookie("nhlc_team");
+			goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
+			goalHorn.play()
+		}
+		
+		goalHornButton = $('#goal-horn');
+		goalHornButton.text("Disable Horn");
+		goalHornButton.attr("onclick","stopGoalHorn()");
+		goalHornButton.addClass("disable-goal-horn");
+		
+	}
+	
+	function stopGoalHorn() {
+		goalHorn.pause();
+		goalHorn = null;
+		
+		goalHornButton = $('#goal-horn');
+		goalHornButton.text("Sound Goal Horn");
+		goalHornButton.attr("onclick","playGoalHorn()");
+		goalHornButton.removeClass("disable-goal-horn");
+	}
 
-        if (screen.width > 500) {
-            const cards = document.getElementById("card-wrapper");
-            const distanceToBottom = innerHeight - cards.offsetTop - 50;
-            cards.style.height = distanceToBottom.toString() + 'px';
-            console.log("Resized to: " + distanceToBottom.toString());
-        }
 
-    });
 </script>
+<script>
+	let team = getCookie("nhlc_team");
+
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		user_team: team[1],
+	});
+</script>
+<script>
+
+	
+	function setCookies() {
+		webhook = 'nhlc_webhook=' + $('#webhook').val();
+		streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
+
+		setCookie(webhook);
+		setCookie(streamDelay);
+	}
+	
+	
+	$(document).ready(function () {
+		let enableWebhookCookie = getCookie("nhlc_enable_webhook");
+		let webhookCookie = getCookie("nhlc_webhook");
+		let streamDelayCookie = getCookie("nhlc_stream_delay");
+	
+		let streamDelay = $('#streamDelay');
+		let checkbox = $('#enable-webhook');
+		let webhook = $('#webhook');
+
+		if (webhookCookie && enableWebhookCookie == 'true') {
+			checkbox.prop('checked', true);
+			webhook.show();	
+			webhook.val(webhookCookie);
+		}
+
+		if (streamDelayCookie) {
+			streamDelay.val(streamDelayCookie);
+		}
+		
+		checkbox.click(function() {
+			if (this.checked) {
+				webhook.fadeIn();
+				setCookie('nhlc_enable_webhook=true');
+			} else {
+				webhook.hide();
+				setCookie('nhlc_enable_webhook=false');
+			}
+
+		})
+
+	})
+
+</script>
+
 
 <script>
 
-    let slug = url => new URL(url).pathname.match(/[^\/]+/g);
-    let user_team = slug(document.location.href);
+	
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-        'user_team': user_team[1],
-    });
+
+	$(document).ready(function () {
+		
+		var heading = $('#instructions-heading');
+		var content = $('#instructions-content');
+		console.log('loaded')
+		
+		heading.click(function() {
+			console.log("clicked heading")
+			heading.toggleClass('active')
+			content.fadeToggle('fast');
+		});
+	})
+
+
+
 
 
 </script>
+
 
 {% endblock %}
 
+
 {% block content %}
+<div class="dashboard">
+	<!-- Header with team name and logo -->
+	<header class="header">
+		{% for team in teams if team.team_abbreviation == team_abbreviation %}
+		<img src="{{ team.logo }}" alt="Team Logo" class="team-logo" id="teamLogo" />
+		<h1 class="team-name" id="teamName">{{ team.team_city }} {{ team.team_name }} Goal Horn</h1>
+		{% endfor %}
+	</header>
+	<!-- How to Use Instructions -->
+	<section id="instrucitons" class="instructions">
 
-<div class="main">
-    <div>
-        <a class="go-back" href=" {{ url_for('teams.pick_team') }} ">&#8592; Go back</a>
-    </div>
-    <div class="title">
-        {% for team in teams if team.team_abbreviation == team_abbreviation %}
-        <h1>{{ team.team_city }} {{ team.team_name }}</h1>
-        {% endfor %}
-    </div>
-    <div class="card-wrapper stacked">
-        {% if game_id %}
-        <div class="card">
-            <h3>Set stream delay</h3>
-            <p>The amount of time the app will pause before playing the goal horn.
-                Tweak this value to work with your stream.</p>
-            <form action="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}" method="post">
-                <input name="stream-delay" type="number" value="10">
-        </div>
-            <input type="submit" href="#" class="start-app" value="START APP">
-        </form>
-        {% else %}
-        <div class="card no-game">
-            <h3>No game today</h3>
-        </div>
-        <p class="no-game">Come back on a day your team plays to use the NHL Companion goal horn app. It's cool, I promise.</p>
-        {% endif %}
-    </div>
-    <div id="card-wrapper" class="card-wrapper">
-        <!-- <div class="card flex-2">
-            <h2>Team Leaders</h2>
-        </div> -->
-        <div class="card">
+		<h2 id="instructions-heading">Configure the NHL Companion</h2>
+		<div id="instructions-content" style="display: none;">
+			<h3 class="feature-callout">Set the stream delay</h3>
+			<p>
+				To get started, set the "Stream Delay" to match any delay on your video
+				feed. Then, press "Start Watching Game" to enable goal tracking. Changes are 
+				coming soon to improve timing!
+			</p>
+			<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
+			<p>
+				Enter the webhook for your service (Home Assistant, for example) and a
+				POST request will be sent to the webhook when a goal is scored!
+			</p>
+			<h3 class="feature-callout">Keep your browser awake</h3>
+			<p>
+				If your browser goes to sleep, the goal horn may
+				not sound. Keep this tab open and active for the best experience.
+			</p>
+		</div>
+		
+	</section>
 
-            {% for team in teams if team.team_abbreviation == team_abbreviation %}
-            <h2>{{ team.team_name }} Upcoming Schedule</h2>
-            {% endfor %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Home</th>
-                        <th>Away</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    {% for game in team_schedule %}
-                    {% if game.date >= today %}
-                    <tr>
-                        {% for team in teams if team.team_abbreviation == game.home_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endfor %}
-                        {% for team in teams if team.team_abbreviation == game.away_team %}
-                        <td>{{ team.team_city }} {{ team.team_name }}</td>
-                        {% endfor %}
-                        
-                        <td>{{ game.date.strftime('%b %d, %Y') }}</td>
-                        <td><a href="{{ game.tickets_link }}" target="_blank">Tickets</a></td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
+	<!-- User controls for streaming delay and goal horn -->
+	<section class="controls">
+		<div class="control-group-config">
+			<div class="stream-delay-control">
+				<label for="streamDelay">Stream delay</label>
+				<input
+					type="number"
+					id="streamDelay"
+					name="streamDelay"
+					min="1" max="30"
+					placeholder="Stream delay"
+					aria-label="Input stream delay in seconds"
+				/>
+			</div>
 
-        </div>
+			<div>
+				<label for="enable-webhook">Enable Webhooks</label>
+				<input type="checkbox" id="enable-webhook">
+			</div>
 
-    </div>
+			<div>
+				<input 
+				type="text" 
+				id="webhook" 
+				placeholder="Webhook: https://..."
+				aria-label="Input full webhook url"
+				hidden>
+			</div>
+		
+		</div>
+
+		<div class="control-group-buttons">
+			{% if game_id %}
+			<a
+			rel="nofollow"
+			href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}"
+			class="control-button" 
+			onclick="setCookies()">
+				Start Watching Game
+			</a>
+			{% else %}
+			<button class="control-button control-button-disabled">
+				No game today
+			</button>
+			{% endif %}
+			<button id="goal-horn" class="control-button" onclick="playGoalHorn()">
+				Sound Goal Horn
+			</button>
+		</div>
+	</section>
+
+	<!-- Upcoming games section with detailed format -->
+	<section class="upcoming-games">
+		<h2>Upcoming Games</h2>
+		<ul class="game-list" id="gameList">
+			{% for game in team_schedule %}
+            {% if game.date >= today %}
+			
+			<div class="game-card">
+				<div class="game-details">
+					<span class="game-date">{{ game.date.strftime('%b %d, %Y') }}</span>
+					<span class="teams">
+						{% for team in teams if team.team_abbreviation == game.home_team %}
+						<span class="home-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						<span class="vs">vs</span> 
+						{% endfor %}
+						{% for team in teams if team.team_abbreviation == game.away_team %}
+						<span class="away-team">{{ team.team_city }} {{ team.team_name }}</span> 
+						{% endfor %}
+					</span>
+				</div>
+				
+				<div class="game-card-cta">
+					<a
+						href="{{game.tickets_link}}"
+						target="_blank"
+						class="ticket-link"
+						><i class="fa-solid fa-xl fa-ticket"></i></a
+					>
+				</div>
+			</div>
+
+			{% endif %}
+			{% endfor %}
+			
+		</ul>
+	</section>
 </div>
 
 {% endblock %}

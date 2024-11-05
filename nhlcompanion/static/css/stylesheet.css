@@ -101,7 +101,7 @@ body {
 }
 
 .control-group-config>.stream-delay-control>label {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .control-group-config input:not([type="checkbox"]) {
@@ -117,7 +117,7 @@ body {
 .control-group-buttons {
     flex: 1;
     align-self: stretch;
-    margin: 12px 0;
+    margin: 12px 0 0 0;
     display: flex;
     flex-flow: column;
     gap: 10px;
@@ -128,6 +128,9 @@ body {
     flex: 1;
     height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 label {

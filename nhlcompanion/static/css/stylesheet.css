@@ -115,8 +115,10 @@ body {
 }
 
 .control-group-buttons {
-    display: flex;
     flex: 1;
+    align-self: stretch;
+    margin: 12px 0;
+    display: flex;
     flex-flow: column;
     gap: 10px;
     align-items: center;

@@ -61,7 +61,6 @@
 
 
 </script>
-
 <script>
 	let team = getCookie("nhlc_team");
 
@@ -70,7 +69,6 @@
 		user_team: team[1],
 	});
 </script>
-
 <script>
 
 	
@@ -117,9 +115,28 @@
 
 </script>
 
+
 <script>
 
 	
+
+
+	$(document).ready(function () {
+		
+		var heading = $('#instructions-heading');
+		var content = $('#instructions-content');
+		console.log('loaded')
+		
+		heading.click(function() {
+			console.log("clicked heading")
+			heading.toggleClass('active')
+			content.fadeToggle('fast');
+		});
+	})
+
+
+
+
 
 </script>
 
@@ -137,24 +154,28 @@
 		{% endfor %}
 	</header>
 	<!-- How to Use Instructions -->
-	<section class="instructions">
-		<h2>Configure the NHL Companion</h2>
-		<h3 class="feature-callout">Set the stream delay</h3>
-		<p>
-			To get started, set the "Stream Delay" to match any delay on your video
-			feed. Then, press "Start Watching Game" to enable goal tracking. Changes are 
-			coming soon to improve timing!
-		</p>
-		<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
-		<p>
-			Enter the webhook for your service (Home Assistant, for example) and a
-			POST request will be sent to the webhook when a goal is scored!
-		</p>
-		<h3 class="feature-callout">Keep your browser awake</h3>
-		<p>
-			If your browser goes to sleep, the goal horn may
-			not sound. Keep this tab open and active for the best experience.
-		</p>
+	<section id="instrucitons" class="instructions">
+
+		<h2 id="instructions-heading">Configure the NHL Companion</h2>
+		<div id="instructions-content" style="display: none;">
+			<h3 class="feature-callout">Set the stream delay</h3>
+			<p>
+				To get started, set the "Stream Delay" to match any delay on your video
+				feed. Then, press "Start Watching Game" to enable goal tracking. Changes are 
+				coming soon to improve timing!
+			</p>
+			<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
+			<p>
+				Enter the webhook for your service (Home Assistant, for example) and a
+				POST request will be sent to the webhook when a goal is scored!
+			</p>
+			<h3 class="feature-callout">Keep your browser awake</h3>
+			<p>
+				If your browser goes to sleep, the goal horn may
+				not sound. Keep this tab open and active for the best experience.
+			</p>
+		</div>
+		
 	</section>
 
 

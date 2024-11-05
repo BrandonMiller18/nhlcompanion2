@@ -36,8 +36,38 @@ body {
 
 .instructions h2 {
     font-size: 1.6em;
+}
+
+#instructions-heading {
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+
+
+#instructions-heading.active {
     margin-bottom: 15px;
 }
+
+#instructions-heading:before {
+    content: '+';
+    font-family: 'Courier New', Courier, monospace;
+    /* Unicode character for "plus" sign (+) */
+    font-size: 42px;
+    margin-right: 16px;
+    transition: all 0.5s;
+}
+
+#instructions-heading:hover:before {
+    padding-right: 15px;
+}
+
+#instructions-heading.active:before {
+    content: "-";
+    padding-right: 15px;
+    /* Unicode character for "minus" sign (-) */
+}
+
 
 .instructions p {
     font-size: 1em;
@@ -350,15 +380,6 @@ label {
 
 /* Base Styles */
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #1e1e1e;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-}
 
 /* Shared Container Style */
 .container {

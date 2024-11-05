@@ -22,7 +22,7 @@
 {% endfor %}
 
 <link rel="canonical" href="https://www.nhlcompanion.com/start/{{team_abbreviation}}"> />
-
+<meta name="robots" content="index, follow">
 
 <script>
 	
@@ -192,6 +192,7 @@
 		<div class="control-group-buttons">
 			{% if game_id %}
 			<a
+			rel="nofollow"
 			href="{{ url_for('watchgame.watchgame', user_team=team_abbreviation, game_id=game_id) }}"
 			class="control-button" 
 			onclick="setCookies()">

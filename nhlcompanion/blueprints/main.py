@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Blueprint, render_template
+from flask import Blueprint, request, render_template, make_response
 from sqlalchemy import desc, asc
 from nhlcompanion.models import Teams, Schedule, Standings
 
@@ -29,3 +29,14 @@ def index():
                            standings = standings,
                            divisions = divisions,
                            conferences = conferences)
+    
+@bp.route('/sitemap.xml')
+@bp.route('/robots.txt')
+def sitemap():
+    file = request.path[1:]
+    response= make_response(render_template(file))
+    if file == 'sitemap.xml':
+        response.headers['Content-Type'] = 'application/xml'
+    else:
+        response.headers['Content-Type'] = 'text/plain'
+    return response

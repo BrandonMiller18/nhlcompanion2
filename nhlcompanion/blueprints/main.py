@@ -32,6 +32,7 @@ def index():
     
 @bp.route('/sitemap.xml')
 @bp.route('/robots.txt')
+@bp.route('/ads.txt')
 def sitemap():
     file = request.path[1:]
     response= make_response(render_template(file))

@@ -58,6 +58,22 @@ function showToast(playType, player, playerHeadshot, teamLogo) {
 }
 
 
+function showNotification(title, bodyContent, iconContent) {
+
+    if (!window.Notification) {
+        console.log('Browser does not support notifications.');
+    } else {
+        // check if permission is already granted
+        if (window.Notification.permission === 'granted') {
+            notify = new window.Notification('A goal was scored!', {
+                body: bodyContent,
+                icon: iconContent,
+            });
+        };
+    };
+};
+
+
 function setContent(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
     let isIntermission = gameData.clock.inIntermission;
@@ -115,7 +131,6 @@ function evaluatePlay(play, gameData) {
     console.log(play.typeDescKey);
     if (play.typeDescKey == "goal") {
         var scoringPlayerId = play.details.scoringPlayerId;
-        console.log(scoringPlayerId);
         var scoringPlayerTotal = play.details.scoringPlayerTotal;
 
         var primaryAssistPlayerId = play.details.assist1PlayerId;
@@ -138,8 +153,8 @@ function evaluatePlay(play, gameData) {
                 } else {
                     var displayLogo = awayTeamLogo
                 }
-                console.log(playerHeadshot);
                 showToast('Goal', playerFirstName + ' ' + playerLastName, playerHeadshot, displayLogo);
+                showNotification(play.typeDescKey, playerFirstName + ' ' + playerLastName, displayLogo);
             };
         };
 
@@ -160,7 +175,7 @@ async function watchGame(gameData) {
     var seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
         let eventId = gameData.plays[i].eventId;
-        seenPlayIds.push(eventId);
+        // seenPlayIds.push(eventId);
     }
 
     while (liveGameStates.includes(gameData.gameState)) {
@@ -185,6 +200,7 @@ async function watchGame(gameData) {
 
 
 $(document).ready(function () {
+    window.Notification.requestPermission();
     getGameData(function (gameData) {
         setContent(gameData);
         watchGame(gameData);

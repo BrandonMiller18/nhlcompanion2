@@ -106,7 +106,6 @@ function setContent(gameData) {
     } else {
         $('#period-label').show();
         $('#time-div').show();
-
     };
 
     if (isIntermission) {
@@ -128,7 +127,6 @@ function setContent(gameData) {
 
 
 function evaluatePlay(play, gameData) {
-    console.log(play.typeDescKey);
     if (play.typeDescKey == "goal") {
         var scoringPlayerId = play.details.scoringPlayerId;
         var scoringPlayerTotal = play.details.scoringPlayerTotal;
@@ -171,6 +169,7 @@ function evaluatePlay(play, gameData) {
 
 async function watchGame(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
+    console.log(gameData.gameState);
 
     var seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
@@ -182,7 +181,8 @@ async function watchGame(gameData) {
         await new Promise(r => setTimeout(r, streamDelay * 1000));
 
         getGameData(function (res) {
-            console.log(res);
+            gameData.gameState = res.gameState;
+            console.log("New: " + gameData.gameState);
             setContent(res);
 
             var plays = res.plays

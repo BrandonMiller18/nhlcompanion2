@@ -22,7 +22,8 @@ function getCookie(name) {
 }
 
 
-function webhookRequest(webhook, payload) {
+function webhookRequest(payload) {
     let enableWebhook = getCookie("nhlc_enable_webhook");
+    let webhook = getCookie("nhlc_webhook");
     if (enableWebhook == "true") { $.post(webhook, payload); }
 }

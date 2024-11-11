@@ -165,6 +165,25 @@ body {
     width: 100%;
 }
 
+input.with-button {
+    border-right: none !important;
+    border-radius: 4px 0 0 4px !important;
+}
+
+.input-button {
+    padding: 0 10px;
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+    border-left: none;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+}
+
+.input-button:hover {
+    background-color: #333;
+}
+
 .control-group-buttons {
     flex: 1;
     align-self: stretch;

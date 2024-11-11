@@ -158,7 +158,7 @@ function evaluatePlay(play, gameData) {
 
 
         if (scoringTeamId == userTeamId) {
-            webhookRequest(webhook, null);
+            webhookRequest(null);
             goalHorn.play();
         }
 

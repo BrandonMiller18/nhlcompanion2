@@ -113,11 +113,12 @@ function setContent(gameData) {
         interval = 120000;
         $('#period-label').hide();
 
-        switch (gameData.displayPeriod) {
-            case 1:
-                $('#period').html("1st Intermission");
-            case 2:
-                $('#period').html("2nd Intermission");
+        if (gameData.displayPeriod == 1) {
+            $('#period').html("1st Intermission");
+        } else if (gameData.displayPeriod == 2) {
+            $('#period').html("2nd Intermission");
+        } else {
+            $('#period').html("Intermission");
         }
     } else {
         $('#period-label').show();

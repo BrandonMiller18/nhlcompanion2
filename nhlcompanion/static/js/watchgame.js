@@ -169,7 +169,6 @@ function evaluatePlay(play, gameData) {
 
 async function watchGame(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
-    console.log(gameData.gameState);
 
     var seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
@@ -182,7 +181,6 @@ async function watchGame(gameData) {
 
         getGameData(function (res) {
             gameData.gameState = res.gameState;
-            console.log("New: " + gameData.gameState);
             setContent(res);
 
             var plays = res.plays

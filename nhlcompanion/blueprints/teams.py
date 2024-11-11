@@ -1,10 +1,16 @@
 import datetime
 
-from flask import Blueprint, render_template, make_response
+from flask import Blueprint, render_template, make_response, redirect, url_for
 from nhlcompanion.models import Teams, Schedule
 from sqlalchemy import or_, asc
 
 bp = Blueprint('teams', __name__, url_prefix='/start')
+
+@bp.route('/')
+def start():
+    '''moved team select to home page for now'''
+    return redirect(url_for('main.index'), code=301)
+
 
 @bp.route('/<team>')
 def team_page(team):

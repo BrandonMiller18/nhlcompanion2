@@ -116,7 +116,6 @@
 		
 		var heading = $('#instructions-heading');
 		var content = $('#instructions-content');
-		console.log('loaded')
 		
 		heading.click(function() {
 			console.log("clicked heading")
@@ -132,33 +131,54 @@
 
 {% block content %}
 <div class="dashboard">
-	<!-- Header with team name and logo -->
-	<header class="header">
-		{% for team in teams if team.team_abbreviation == team_abbreviation %}
-		<img src="{{ team.logo }}" alt="Team Logo" class="team-logo" id="teamLogo" />
-		<h1 class="team-name" id="teamName">{{ team.team_city }} {{ team.team_name }} Goal Horn</h1>
-		{% endfor %}
-	</header>
+	<section>
+		<!-- Header with team name and logo -->
+		<header class="header">
+			{% for team in teams if team.team_abbreviation == team_abbreviation %}
+	
+			<div>
+				<img class="team-logo-team-page" src="{{ team.logo }}" alt="Team Logo" id="teamLogo" />
+			</div>
+			<h1 class="team-name" id="teamName">{{ team.team_city }} {{ team.team_name }} <span>Goal Horn</span></h1>
+			{% endfor %}
+		</header>
+		<div class="main-callout">Automated goal horn app</div>
+	</section>
 	<!-- How to Use Instructions -->
 	<section id="instrucitons" class="instructions">
 
 		<h2 id="instructions-heading">Configure the NHL Companion</h2>
 		<div id="instructions-content" style="display: none;">
-			<h3 class="feature-callout">Set the stream delay</h3>
+			<p>NHL Companion will "watch" the game and send various events when your
+				favorite team scores. These evnts include:</p>
+				<ul>
+					<li>Automatically sounding the goal horn of your team</li>
+					<li>Sending a webhook to any service of your choice. Use this
+						to trigger automations in your home automation platform.</li>
+					<li>Send a desktop notification, if desired, when a goal is scored.</li>
+				</ul>
+			<p>You can manually play the goal horn as well. This will not trigger a webhook request. 
+				A manual webhook option is coming soon.
+			</p>
+			<p>Follow the steps below to get started!</p>
+			<h3 class="feature-callout">1. Set the stream delay</h3>
 			<p>
 				To get started, set the "Stream Delay" to match any delay on your video
-				feed. Then, press "Start Watching Game" to enable goal tracking. Changes are 
-				coming soon to improve timing!
+				feed. NHL Companion often can see the future and spoil the fun. The default
+				value is 3 seconds.
 			</p>
-			<h3 class="feature-callout">NHL Companion now supports webhooks!</h3>
+			<h3 class="feature-callout">2. Configure your webhook</h3>
 			<p>
-				Enter the webhook for your service (Home Assistant, for example) and a
-				POST request will be sent to the webhook when a goal is scored!
+				Use webhooks to trigger home automations when your team scores.
+				Enable the webhooks feature and enter the webhook for your
+				service (Home Assistant, for example). A POST request will be sent to 
+				the webhook when a goal is scored!
 			</p>
-			<h3 class="feature-callout">Keep your browser awake</h3>
+			<h3 class="feature-callout">3. Keep your browser awake</h3>
 			<p>
-				If your browser goes to sleep, the goal horn may
-				not sound. Keep this tab open and active for the best experience.
+				NHL Companion will request permission to keep your browser awake.
+				If your browser goes to sleep, the goal horn may not sound.
+				Keep this tab open and active for the best experience.
 			</p>
 		</div>
 		

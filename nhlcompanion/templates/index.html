@@ -28,7 +28,7 @@
         <div class="team-grid">
           <!-- Placeholder logos for teams -->
           {% for team in teams %}
-          <div class="team-logo" onclick="selectTeam('team1')">
+          <div class="team-logo">
             <a href="{{ url_for('teams.team_page', team=team.team_abbreviation) }}"><img src="{{ team.logo }}" alt="Team 1 Logo"></a>
           </div>
           {% endfor %}

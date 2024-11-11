@@ -54,7 +54,7 @@
 		goalHorn = null;
 		
 		goalHornButton = $('#goal-horn');
-		goalHornButton.text("Sound Goal Horn");
+		goalHornButton.html("<i style='margin-right: 10px;' class='fa-solid fa-volume-high'></i>Sound Goal Horn");
 		goalHornButton.attr("onclick","playGoalHorn()");
 		goalHornButton.removeClass("disable-goal-horn");
 	}
@@ -72,7 +72,11 @@
 <script>
 	function setCookies() {
 		webhook = 'nhlc_webhook=' + $('#webhook').val();
-		streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
+		if ($('#streamDelay').val() < 3) {
+			streamDelay = 'nhlc_stream_delay=3'	
+		} else {
+			streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
+		}
 
 		setCookie(webhook);
 		setCookie(streamDelay);
@@ -87,11 +91,17 @@
 		let streamDelay = $('#streamDelay');
 		let checkbox = $('#enable-webhook');
 		let webhook = $('#webhook');
+		let webhookUpdateButton = $('.input-button');
+		let sendWebhook = $('#send-webhook');
 
 		if (webhookCookie && enableWebhookCookie == 'true') {
 			checkbox.prop('checked', true);
 			webhook.show();	
+			webhookUpdateButton.show();
 			webhook.val(webhookCookie);
+			sendWebhook.show();
+		} else {
+			sendWebhook.hide();
 		}
 
 		if (streamDelayCookie) {
@@ -101,12 +111,34 @@
 		checkbox.click(function() {
 			if (this.checked) {
 				webhook.fadeIn();
+				webhookUpdateButton.fadeIn();
 				setCookie('nhlc_enable_webhook=true');
+				if (getCookie("nhlc_webhook") != "" && getCookie("nhlc_enable_webhook") == 'true') {
+					sendWebhook.fadeIn();
+				}
 			} else {
 				webhook.hide();
+				sendWebhook.hide();
+				webhookUpdateButton.hide();
 				setCookie('nhlc_enable_webhook=false');
 			}
 
+		})
+
+		webhookUpdateButton.click(function() {
+			setCookies();
+			if (getCookie("nhlc_webhook") != "" && getCookie("nhlc_enable_webhook") == 'true') {
+				sendWebhook.fadeIn();
+			} else {
+				alert("Enter a webhook URL");
+			}
+		})
+
+		sendWebhook.click(async function() {
+			sendWebhook.toggleClass('control-button-disabled');
+			await webhookRequest(null);
+			await new Promise(r => setTimeout(r, 500));
+			sendWebhook.toggleClass('control-button-disabled');
 		})
 
 	})
@@ -118,8 +150,7 @@
 		var content = $('#instructions-content');
 		
 		heading.click(function() {
-			console.log("clicked heading")
-			heading.toggleClass('active')
+			heading.toggleClass('active');
 			content.fadeToggle('fast');
 		});
 	})
@@ -150,15 +181,17 @@
 		<h2 id="instructions-heading">Configure the NHL Companion</h2>
 		<div id="instructions-content" style="display: none;">
 			<p>NHL Companion will "watch" the game and send various events when your
-				favorite team scores. These evnts include:</p>
+				favorite team scores. These events include:</p>
 				<ul>
 					<li>Automatically sounding the goal horn of your team</li>
 					<li>Sending a webhook to any service of your choice. Use this
 						to trigger automations in your home automation platform.</li>
 					<li>Send a desktop notification, if desired, when a goal is scored.</li>
 				</ul>
-			<p>You can manually play the goal horn as well. This will not trigger a webhook request. 
-				A manual webhook option is coming soon.
+			<p>
+				You can manually sound the goal horn or trigger a webhook request. This is
+				great for triggering home automations manually instead of relying on the
+				timing of the stream.
 			</p>
 			<p>Follow the steps below to get started!</p>
 			<h3 class="feature-callout">1. Set the stream delay</h3>
@@ -207,11 +240,13 @@
 
 			<div>
 				<input 
+				class="with-button"
 				type="text" 
 				id="webhook" 
 				placeholder="Webhook: https://..."
 				aria-label="Input full webhook url"
 				hidden>
+				<button class="input-button" onclick="setCookies()" hidden>Update</button>
 			</div>
 		
 		</div>
@@ -231,7 +266,10 @@
 			</button>
 			{% endif %}
 			<button id="goal-horn" class="control-button" onclick="playGoalHorn()">
-				Sound Goal Horn
+				<i style="margin-right: 10px;" class="fa-solid fa-volume-high"></i>Sound Goal Horn
+			</button>
+			<button id="send-webhook" class="control-button" onclick="">
+				<i style="margin-right: 10px;" class="fa-solid fa-paper-plane"></i>Send Webhook
 			</button>
 		</div>
 	</section>

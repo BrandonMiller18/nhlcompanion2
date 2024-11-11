@@ -174,7 +174,7 @@ async function watchGame(gameData) {
     var seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
         let eventId = gameData.plays[i].eventId;
-        // seenPlayIds.push(eventId);
+        seenPlayIds.push(eventId);
     }
 
     while (liveGameStates.includes(gameData.gameState)) {

@@ -165,6 +165,12 @@ body {
     width: 100%;
 }
 
+input[type="checkbox"] {
+    cursor: pointer;
+    scale: 1.5;
+    margin-left: 5px;
+}
+
 input.with-button {
     border-right: none !important;
     border-radius: 4px 0 0 4px !important;
@@ -184,13 +190,52 @@ input.with-button {
     background-color: #333;
 }
 
+.webhook-enable-text {
+    font-size: .75em;
+    display: flex;
+    flex-flow: column;
+    gap: 5px;
+    word-break: break-all;
+}
+
+.webhook-enable-text>p>i.enabled {
+    animation: webhookPulse 1s infinite;
+}
+
+@keyframes webhookPulse {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.1;
+    }
+
+    100% {
+        scale: 1;
+    }
+
+}
+
+.webhook-enable-text.enabled {
+    color: #55f255;
+}
+
+.webhook-enable-text.disabled {
+    color: #f26f6f;
+}
+
+#webhook-url {
+    color: #767676;
+}
+
 .control-group-buttons {
     flex: 1;
     align-self: stretch;
     margin: 12px 0 0 0;
     display: flex;
     flex-flow: column;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -202,6 +247,16 @@ input.with-button {
     justify-content: center;
     align-items: center;
 }
+
+
+.control-group-buttons>*:nth-child(1) {
+    background-color: #007acc;
+}
+
+.control-group-buttons>*>:nth-child(1) {}
+
+.control-group-buttons>*>:nth-child(1) {}
+
 
 label {
     font-size: 1em;
@@ -218,29 +273,32 @@ label {
     text-decoration: none;
     text-align: center;
     color: #fff;
-    background-color: #007acc;
-    border: none;
-    border-radius: 4px;
+    background-color: transparent;
+    border: 2px solid #007acc;
+    border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .control-button.disable-goal-horn {
     background-color: #630000;
+    border-color: #630000;
 }
 
 .control-button.disable-goal-horn:hover {
     background-color: #4f0000;
+    border-color: #4f0000;
 }
 
 .control-button-disabled {
-    background-color: #999;
-    color: #333;
-    pointer-events: none;
+    background-color: transparent !important;
+    color: #76766c;
+    border-color: #76766c;
+    cursor: not-allowed;
 }
 
 .control-button:hover {
-    background-color: #005f99;
+    background-color: #007acc;
 }
 
 /* Upcoming Games Section */
@@ -346,6 +404,7 @@ label {
 
     .control-button {
         padding: 12px 20px;
+        border-radius: 100px;
     }
 
     .upcoming-games {

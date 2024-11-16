@@ -70,16 +70,46 @@
 	});
 </script>
 <script>
+
+	function setEnableWebhookText(enabled) {
+
+		let webhookEnabledText = $('#webhook-enable-text');
+		let webhookUrlText = $('#webhook-url');
+		let sendWebhook = $('#send-webhook');
+		let webhookEnabledSymbol = $('.fa-circle');
+
+		if (enabled) {
+			webhookEnabledText.text("Webhooks enabled");
+			webhookEnabledSymbol.toggleClass('enabled');
+			webhookUrlText.fadeIn();
+			webhookUrlText.html('<b>Your webhook: </b>' + getCookie("nhlc_webhook"))
+			$('.webhook-enable-text').addClass('enabled').removeClass('disabled');
+			sendWebhook.fadeIn();
+		} else {
+			webhookEnabledText.html("Webhooks disabled");
+			webhookEnabledSymbol.toggleClass('enabled');
+			webhookUrlText.hide();
+			$('.webhook-enable-text').addClass('disabled').removeClass('enabled');
+			sendWebhook.hide();
+		}
+		
+	}
+
 	function setCookies() {
 		webhook = 'nhlc_webhook=' + $('#webhook').val();
-		if ($('#streamDelay').val() < 3) {
-			streamDelay = 'nhlc_stream_delay=3'	
-		} else {
-			streamDelay = 'nhlc_stream_delay=' + $('#streamDelay').val();
-		}
+		let webhookRegex = /(http|https)/;
 
-		setCookie(webhook);
-		setCookie(streamDelay);
+		if ($('#streamDelay').val() < 3) {
+			setCookie('nhlc_stream_delay=3');
+		} else {
+			setCookie('nhlc_stream_delay=' + $('#streamDelay').val());
+		};
+
+		if (webhook && webhookRegex.test(String(webhook).toLowerCase()) == true) {
+			setCookie(webhook);	
+		} else {
+			alert("ERROR: Invalid webhook.\nEnter a full URL like: https://www.example.com/path/to/webhook");
+		};
 	}
 	
 	
@@ -93,15 +123,16 @@
 		let webhook = $('#webhook');
 		let webhookUpdateButton = $('.input-button');
 		let sendWebhook = $('#send-webhook');
+		
 
 		if (webhookCookie && enableWebhookCookie == 'true') {
 			checkbox.prop('checked', true);
 			webhook.show();	
 			webhookUpdateButton.show();
 			webhook.val(webhookCookie);
-			sendWebhook.show();
+			setEnableWebhookText(true);
 		} else {
-			sendWebhook.hide();
+			setEnableWebhookText(false);
 		}
 
 		if (streamDelayCookie) {
@@ -113,13 +144,13 @@
 				webhook.fadeIn();
 				webhookUpdateButton.fadeIn();
 				setCookie('nhlc_enable_webhook=true');
-				if (getCookie("nhlc_webhook") != "" && getCookie("nhlc_enable_webhook") == 'true') {
-					sendWebhook.fadeIn();
+				if (getCookie("nhlc_webhook") && getCookie("nhlc_enable_webhook") == 'true') {
+					setEnableWebhookText(true);
 				}
 			} else {
 				webhook.hide();
-				sendWebhook.hide();
 				webhookUpdateButton.hide();
+				setEnableWebhookText(false);
 				setCookie('nhlc_enable_webhook=false');
 			}
 
@@ -127,10 +158,8 @@
 
 		webhookUpdateButton.click(function() {
 			setCookies();
-			if (getCookie("nhlc_webhook") != "" && getCookie("nhlc_enable_webhook") == 'true') {
-				sendWebhook.fadeIn();
-			} else {
-				alert("Enter a webhook URL");
+			if (getCookie("nhlc_webhook") && getCookie("nhlc_enable_webhook") == 'true') {
+				setEnableWebhookText(true);
 			}
 		})
 
@@ -234,7 +263,7 @@
 			</div>
 
 			<div>
-				<label for="enable-webhook">Enable Webhooks</label>
+				<label for="enable-webhook">Enable Webhooks: </label>
 				<input type="checkbox" id="enable-webhook">
 			</div>
 
@@ -246,7 +275,11 @@
 				placeholder="Webhook: https://..."
 				aria-label="Input full webhook url"
 				hidden>
-				<button class="input-button" onclick="setCookies()" hidden>Update</button>
+				<button class="input-button" hidden>Update</button>
+			</div>
+			<div class="webhook-enable-text">
+				<p><i class="fa-solid fa-circle"></i> <span id="webhook-enable-text">Webhook Enabled</span></p>
+				<p id="webhook-url"></p>
 			</div>
 		
 		</div>

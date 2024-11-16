@@ -84,7 +84,7 @@
 			webhookUrlText.fadeIn();
 			webhookUrlText.html('<b>Your webhook: </b>' + getCookie("nhlc_webhook"))
 			$('.webhook-enable-text').addClass('enabled').removeClass('disabled');
-			sendWebhook.fadeIn();
+			sendWebhook.fadeIn('slow');
 		} else {
 			webhookEnabledText.html("Webhooks disabled");
 			webhookEnabledSymbol.toggleClass('enabled');
@@ -97,7 +97,7 @@
 
 	function setCookies() {
 		webhook = 'nhlc_webhook=' + $('#webhook').val();
-		let webhookRegex = /(http|https)/;
+		let webhookRegex = /(https)/;
 
 		if ($('#streamDelay').val() < 3) {
 			setCookie('nhlc_stream_delay=3');
@@ -108,7 +108,7 @@
 		if (webhook && webhookRegex.test(String(webhook).toLowerCase()) == true) {
 			setCookie(webhook);	
 		} else {
-			alert("ERROR: Invalid webhook.\nEnter a full URL like: https://www.example.com/path/to/webhook");
+			alert("ERROR: Invalid webhook.\nEnter a full URL like: https://www.example.com/path/to/webhook\n\n*https is required");
 		};
 	}
 	
@@ -146,6 +146,7 @@
 				setCookie('nhlc_enable_webhook=true');
 				if (getCookie("nhlc_webhook") && getCookie("nhlc_enable_webhook") == 'true') {
 					setEnableWebhookText(true);
+					
 				}
 			} else {
 				webhook.hide();

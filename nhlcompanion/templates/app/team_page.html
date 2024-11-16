@@ -84,7 +84,7 @@
 			webhookUrlText.fadeIn();
 			webhookUrlText.html('<b>Your webhook: </b>' + getCookie("nhlc_webhook"))
 			$('.webhook-enable-text').addClass('enabled').removeClass('disabled');
-			sendWebhook.fadeIn('slow');
+			sendWebhook.fadeIn();
 		} else {
 			webhookEnabledText.html("Webhooks disabled");
 			webhookEnabledSymbol.toggleClass('enabled');
@@ -302,7 +302,7 @@
 			<button id="goal-horn" class="control-button" onclick="playGoalHorn()">
 				<i style="margin-right: 10px;" class="fa-solid fa-volume-high"></i>Sound Goal Horn
 			</button>
-			<button id="send-webhook" class="control-button" onclick="">
+			<button id="send-webhook" class="control-button" style="display: none;">
 				<i style="margin-right: 10px;" class="fa-solid fa-paper-plane"></i>Send Webhook
 			</button>
 		</div>

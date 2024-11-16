@@ -223,6 +223,8 @@ input.with-button {
 
 .webhook-enable-text.disabled {
     color: #f26f6f;
+    position: relative;
+    top: -18px;
 }
 
 #webhook-url {
@@ -253,11 +255,6 @@ input.with-button {
     background-color: #007acc;
 }
 
-.control-group-buttons>*>:nth-child(1) {}
-
-.control-group-buttons>*>:nth-child(1) {}
-
-
 label {
     font-size: 1em;
     padding: 10px 10px 10px 0;
@@ -277,7 +274,7 @@ label {
     border: 2px solid #007acc;
     border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .control-button.disable-goal-horn {

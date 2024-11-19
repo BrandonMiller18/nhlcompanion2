@@ -7,9 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block html_title %}{% endblock %}</title>
     <meta name="description" content="{%block meta_desc %}{% endblock %}">
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7208176221866382"
-     crossorigin="anonymous"></script>
 
     <!-- JS and CSS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -21,6 +18,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/brands.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/solid.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+
+    {% if not is_production() %}
+
     <!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -28,6 +28,12 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-KG5NKZZ');</script>
     <!-- End Google Tag Manager -->
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7208176221866382"
+    crossorigin="anonymous"></script>
+
+    {% endif %}
+    
     {% block html_head %}{% endblock %}
 </head>
 <body>

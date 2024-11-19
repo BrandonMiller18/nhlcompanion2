@@ -15,14 +15,8 @@ var userTeamId = getCookie("nhlc_userTeamId");
 // set the goal horn file
 var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');
 
-// set default interval to check game data
-var interval = 3000;
-
-// set game over to false. If game is over, this will change to true and prevent more calls
-var gameOver = false;
 
 function getGameData(callback) {
-
     $.ajax({
         type: "get",
         url: "/watch-game/_update-score/" + gameId,
@@ -34,7 +28,6 @@ function getGameData(callback) {
             console.log(err);
         }
     });
-
 };
 
 
@@ -54,8 +47,8 @@ function showToast(playType, player, playerHeadshot, teamLogo) {
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
-    }
-}
+    };
+};
 
 
 function showNotification(title, bodyContent, iconContent) {
@@ -85,49 +78,42 @@ function setContent(gameData) {
 
 
     if (!(liveGameStates.includes(gameData.gameState))) {
+        $('#period').hide();
+        $('#time-div').hide();
 
-        $('#period-label').hide();
         if (gameData.gameState == "FUT") {
-            $('#period').html("GAME NOT STARTED<br>Data is automatically refreshed every 30 minutes.");
-            $('#time-div').hide();
-            // if not started, check API every 30 minutes
-            interval = 1800000;
+            $('#period-label').html("GAME NOT STARTED<br>Data is automatically refreshed every 30 minutes.");
+            return;
         } else if (gameData.gameState == "PRE") {
-            $('#period').html("GAME ABOUT TO START<br>Data is automatically refreshed every 2 minutes.");
-            // if pregame, check API every 2 minutes
-            interval = 120000;
+            $('#period-label').html("GAME ABOUT TO START<br>Data is automatically refreshed every 2 minutes.");
+            return;
         } else {
-            $('#period').html("GAME OVER");
-            $('#time-div').hide();
-            gameOver = true;
+            $('#period-label').html("GAME OVER");
             return;
         };
-        $('#time-div').hide();
     } else {
-        $('#period-label').show();
+        $('#period').show();
         $('#time-div').show();
-    };
-
-    if (isIntermission) {
-        // if intermission, check only every 2 minutes
-        interval = 120000;
-        $('#period-label').hide();
-
-        if (gameData.displayPeriod == 1) {
-            $('#period').html("1st Intermission");
-        } else if (gameData.displayPeriod == 2) {
-            $('#period').html("2nd Intermission");
-        } else {
-            $('#period').html("Intermission");
-        }
-    } else {
-        $('#period-label').show();
     }
 
-}
+    if (isIntermission) {
+        $('#period').hide();
+
+        if (gameData.displayPeriod == 1) {
+            $('#period-label').html("1st Intermission");
+        } else if (gameData.displayPeriod == 2) {
+            $('#period-label').html("2nd Intermission");
+        } else {
+            $('#period-label').html("Intermission");
+        };
+    } else {
+        $('#period').show();
+    };
+};
 
 
 function evaluatePlay(play, gameData) {
+    console.log(play.typeDescKey);
     if (play.typeDescKey == "goal") {
         var scoringPlayerId = play.details.scoringPlayerId;
         var scoringPlayerTotal = play.details.scoringPlayerTotal;
@@ -138,7 +124,6 @@ function evaluatePlay(play, gameData) {
 
         var newHomeScore = play.details.homeScore;
         var newAwayScore = play.details.awayScore;
-
 
         for (i = 0; i < gameData.rosterSpots.length; i++) {
             if (gameData.rosterSpots[i].playerId == scoringPlayerId) {
@@ -157,15 +142,12 @@ function evaluatePlay(play, gameData) {
             };
         };
 
-
         if (scoringTeamId == userTeamId) {
             webhookRequest(null);
             goalHorn.play();
-        }
-
-
+        };
     };
-}
+};
 
 
 async function watchGame(gameData) {

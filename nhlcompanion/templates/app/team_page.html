@@ -96,17 +96,15 @@
 	}
 
 	function setCookies() {
-		webhook = 'nhlc_webhook=' + $('#webhook').val();
-		let webhookRegex = /(https)/;
-
 		if ($('#streamDelay').val() < 3) {
 			setCookie('nhlc_stream_delay=3');
 		} else {
 			setCookie('nhlc_stream_delay=' + $('#streamDelay').val());
 		};
 
-		if (webhook && webhookRegex.test(String(webhook).toLowerCase()) == true) {
-			setCookie(webhook);	
+		if ($('#webhook').val().startsWith('https://')) {
+			setCookie('nhlc_webhook=' + $('#webhook').val());	
+		} else if (getCookie("nhlc_enable_webhook") == 'false' || getCookie("nhlc_enable_webhook") == false ) {
 		} else {
 			alert("ERROR: Invalid webhook.\nEnter a full URL like: https://www.example.com/path/to/webhook\n\n*https is required");
 		};
@@ -140,6 +138,11 @@
 		}
 		
 		checkbox.click(function() {
+
+			if (getCookie('nhlc_enable_webhook') == 'false') {
+				$('.webhook-enable-text').css({'top': '0'});
+			};
+
 			if (this.checked) {
 				webhook.fadeIn();
 				webhookUpdateButton.fadeIn();
@@ -147,15 +150,16 @@
 				if (getCookie("nhlc_webhook") && getCookie("nhlc_enable_webhook") == 'true') {
 					setEnableWebhookText(true);
 					
-				}
+				};
 			} else {
 				webhook.hide();
 				webhookUpdateButton.hide();
 				setEnableWebhookText(false);
 				setCookie('nhlc_enable_webhook=false');
-			}
+				$('.webhook-enable-text').css({'top': ''});
+			};
 
-		})
+		});
 
 		webhookUpdateButton.click(function() {
 			setCookies();
@@ -183,7 +187,7 @@
 			heading.toggleClass('active');
 			content.fadeToggle('fast');
 		});
-	})
+	});
 </script>
 
 

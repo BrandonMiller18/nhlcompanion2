@@ -2,9 +2,6 @@ import os
 from flask import Flask, request
 
 def create_app(test_config=None):
-    def is_production():
-        production_hostname = ['nhlcompanion.com']
-        return request.host in production_hostname
     
     app = Flask(__name__)
 
@@ -27,10 +24,5 @@ def create_app(test_config=None):
     app.register_blueprint(main.bp)
     app.register_blueprint(teams.bp)
     app.register_blueprint(watchgame.bp)
-    
-    
-
-    # Register the global function with Jinja
-    app.jinja_env.globals['is_production'] = is_production
     
     return app

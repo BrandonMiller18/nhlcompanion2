@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/solid.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
-    {% if not is_production() %}
+    {% if is_production() %}
 
     <!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

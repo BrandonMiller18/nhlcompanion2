@@ -21,7 +21,6 @@ function getCookie(name) {
     return false;
 }
 
-
 function webhookRequest(payload) {
     let enableWebhook = getCookie("nhlc_enable_webhook");
     let webhook = getCookie("nhlc_webhook");

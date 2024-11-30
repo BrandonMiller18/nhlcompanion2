@@ -1,6 +1,22 @@
 // Create a global variable for the goalHorn
 let goalHorn;
 
+
+async function createGoalHorn() {
+    const team = getCookie("nhlc_team");
+    const filepath = '/static/sounds/';
+
+    const resp = await fetch(filepath + team.toLowerCase() + '.mp3');
+
+    if (resp.ok) {
+        const goalHorn = new Audio(filepath + team.toLowerCase() + '.mp3');
+        return goalHorn;
+    } else {
+        const goalHorn = new Audio(filepath + 'goal.mp3');
+        return goalHorn;
+    };
+};
+
 async function playGoalHorn() {
     // Ensure goalHorn is resolved from the createGoalHorn function
     if (!goalHorn) {

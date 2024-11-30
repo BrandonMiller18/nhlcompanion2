@@ -12,9 +12,6 @@ var homeTeamId = getCookie("nhlc_homeTeamId");
 var awayTeamId = getCookie("nhlc_awayTeamId");
 var userTeamId = getCookie("nhlc_userTeamId");
 
-// set the goal horn file
-var goalHorn = new Audio('/static/sounds/' + userTeam.toLowerCase() + '.mp3');
-
 
 function getGameData(callback) {
     $.ajax({
@@ -43,10 +40,10 @@ function showToast(playType, player, playerHeadshot, teamLogo) {
         // Show the toast with the 'show' class
         toast.classList.add('show');
 
-        //Fade out after 3 seconds
+        //Fade out after x seconds
         setTimeout(() => {
             toast.classList.remove('show');
-        }, 3000);
+        }, 10000);
     };
 };
 
@@ -144,7 +141,7 @@ function evaluatePlay(play, gameData) {
 
         if (scoringTeamId == userTeamId) {
             webhookRequest(null);
-            goalHorn.play();
+            playGoalHorn();
         };
     };
 };
@@ -153,7 +150,7 @@ function evaluatePlay(play, gameData) {
 async function watchGame(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
 
-    var seenPlayIds = []
+    let seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
         let eventId = gameData.plays[i].eventId;
         seenPlayIds.push(eventId);
@@ -166,13 +163,13 @@ async function watchGame(gameData) {
             gameData.gameState = res.gameState;
             setContent(res);
 
-            var plays = res.plays
+            let plays = res.plays
 
             for (i = 0; i < plays.length; i++) {
                 let playId = plays[i].eventId;
                 if (!(seenPlayIds.includes(playId))) {
-                    evaluatePlay(plays[i], gameData);
                     seenPlayIds.push(playId);
+                    evaluatePlay(plays[i], gameData);
                 };
             };
         });

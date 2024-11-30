@@ -34,44 +34,8 @@
 
 <link rel="canonical" href="https://www.nhlcompanion.com/start/{{team_abbreviation}}">
 <meta name="robots" content="index, follow">
+<script src="{{ url_for('static', filename='js/goalHorn.js') }}"></script>
 
-<script>
-	
-	goalHorn = createGoalHorn();
-	function createGoalHorn() {
-		let team = getCookie("nhlc_team");
-		goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
-		return goalHorn
-	}
-
-	function playGoalHorn() {
-		if (goalHorn) {
-			goalHorn.play();
-		} else {
-			let team = getCookie("nhlc_team");
-			goalHorn = new Audio('/static/sounds/' + team.toLowerCase() + '.mp3');
-			goalHorn.play()
-		}
-		
-		goalHornButton = $('#goal-horn');
-		goalHornButton.text("Disable Horn");
-		goalHornButton.attr("onclick","stopGoalHorn()");
-		goalHornButton.addClass("disable-goal-horn");
-		
-	}
-	
-	function stopGoalHorn() {
-		goalHorn.pause();
-		goalHorn = null;
-		
-		goalHornButton = $('#goal-horn');
-		goalHornButton.html("<i style='margin-right: 10px;' class='fa-solid fa-volume-high'></i>Sound Goal Horn");
-		goalHornButton.attr("onclick","playGoalHorn()");
-		goalHornButton.removeClass("disable-goal-horn");
-	}
-
-
-</script>
 <script>
 	let team = getCookie("nhlc_team");
 
@@ -91,14 +55,14 @@
 
 		if (enabled) {
 			webhookEnabledText.text("Webhooks enabled");
-			webhookEnabledSymbol.toggleClass('enabled');
+			webhookEnabledSymbol.addClass('enabled');
 			webhookUrlText.fadeIn();
 			webhookUrlText.html('<b>Your webhook: </b>' + getCookie("nhlc_webhook"))
 			$('.webhook-enable-text').addClass('enabled').removeClass('disabled');
 			sendWebhook.fadeIn();
 		} else {
 			webhookEnabledText.html("Webhooks disabled");
-			webhookEnabledSymbol.toggleClass('enabled');
+			webhookEnabledSymbol.removeClass('enabled');
 			webhookUrlText.hide();
 			$('.webhook-enable-text').addClass('disabled').removeClass('enabled');
 			sendWebhook.hide();

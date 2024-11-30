@@ -27,3 +27,19 @@ function webhookRequest(payload) {
     let webhook = getCookie("nhlc_webhook");
     if (enableWebhook == "true") { $.post(webhook, payload); }
 }
+
+
+async function createGoalHorn() {
+    const team = getCookie("nhlc_team");
+    const filepath = '/static/sounds/';
+
+    const resp = await fetch(filepath + team.toLowerCase() + '.mp3');
+
+    if (resp.ok) {
+        const goalHorn = new Audio(filepath + team.toLowerCase() + '.mp3');
+        return goalHorn;
+    } else {
+        const goalHorn = new Audio(filepath + 'goal.mp3');
+        return goalHorn;
+    };
+};

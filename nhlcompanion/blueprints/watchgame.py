@@ -41,11 +41,11 @@ def watchgame(user_team, game_id):
 def update_score(game_id):
     """Route for AJAX request to get game data and update scores"""
             
-    # r = requests.get(f'https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play')
-    # res = r.json()
+    r = requests.get(f'https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play')
+    res = r.json()
     
     # for testing
-    with open('nhlcompanion/static/test/gamedata.json', 'r') as f:
-        res = json.load(f)
+    # with open('nhlcompanion/static/test/gamedata.json', 'r') as f:
+    #    res = json.load(f)
 
     return res 

@@ -79,10 +79,10 @@ function setContent(gameData) {
         $('#time-div').hide();
 
         if (gameData.gameState == "FUT") {
-            $('#period-label').html("GAME NOT STARTED<br>Data is automatically refreshed every 30 minutes.");
+            $('#period-label').html("This game has not started<br>Data is automatically refreshed every 2 minutes.");
             return;
         } else if (gameData.gameState == "PRE") {
-            $('#period-label').html("GAME ABOUT TO START<br>Data is automatically refreshed every 2 minutes.");
+            $('#period-label').html("PREGAME<br>Data is automatically refreshed every 30 seconds.");
             return;
         } else {
             $('#period-label').html("GAME OVER");
@@ -91,6 +91,8 @@ function setContent(gameData) {
     } else {
         $('#period').show();
         $('#time-div').show();
+        $('#period-label').html("Period: ");
+        $('#time-label').html("Time Remaining: ")
     }
 
     if (isIntermission) {
@@ -112,12 +114,16 @@ function setContent(gameData) {
 function evaluatePlay(play, gameData) {
     console.log(play.typeDescKey);
     if (play.typeDescKey == "goal") {
+        if (play.details.eventOwnerTeamId == userTeamId) {
+            webhookRequest(null);
+            playGoalHorn();
+        };
+
         var scoringPlayerId = play.details.scoringPlayerId;
         var scoringPlayerTotal = play.details.scoringPlayerTotal;
 
         var primaryAssistPlayerId = play.details.assist1PlayerId;
         var secondaryAssistPlayerId = play.details.assist2PlayerId;
-        var scoringTeamId = play.details.eventOwnerTeamId;
 
         var newHomeScore = play.details.homeScore;
         var newAwayScore = play.details.awayScore;
@@ -138,22 +144,31 @@ function evaluatePlay(play, gameData) {
                 showNotification(play.typeDescKey, playerFirstName + ' ' + playerLastName, displayLogo);
             };
         };
-
-        if (scoringTeamId == userTeamId) {
-            webhookRequest(null);
-            playGoalHorn();
-        };
     };
 };
 
 
 async function watchGame(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
+    const preGameStates = ["PRE", "FUT"];
 
     let seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
         let eventId = gameData.plays[i].eventId;
         seenPlayIds.push(eventId);
+    }
+
+    while (preGameStates.includes(gameData.gameState)) {
+        if (gameData.gameState == "FUT") {
+            await new Promise(r => setTimeout(r, 120 * 1000));
+        } else if (gameData.gameState == "PRE") {
+            await new Promise(r => setTimeout(r, 30 * 1000));
+        };
+
+        getGameData(function (res) {
+            gameData.gameState = res.gameState;
+            setContent(res);
+        });
     }
 
     while (liveGameStates.includes(gameData.gameState)) {

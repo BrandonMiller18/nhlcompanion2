@@ -46,6 +46,6 @@ def update_score(game_id):
     
     # for testing
     # with open('nhlcompanion/static/test/gamedata.json', 'r') as f:
-    #     res = json.load(f)
+    #    res = json.load(f)
 
     return res 

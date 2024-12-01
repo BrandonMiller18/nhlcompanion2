@@ -165,6 +165,89 @@
 	});
 </script>
 
+{% if game_id %}
+<script>
+	function getGameData(callback) {
+		$.ajax({
+			type: "get",
+			url: "/watch-game/_update-score/{{game_id}}",
+			dataType: "json",
+			success: function (data) {
+				callback(data)
+			},
+			error: function (err) {
+				console.log(err);
+			}
+		});
+	};
+
+	function setContent(gameData) {
+
+		if(gameData.gameState == "FUT") {
+			$('.live-game-callout').hide();
+			$('.live-game-header').hide();
+			return
+		};
+
+		const gameStatus = $('#game-status');
+		const homeScore = $('#home-score');
+		const homeTeam = $('#home-team');
+		const awayScore = $('#away-score');
+		const awayTeam = $('#away-team');
+		const period = $('#period');
+		const time = $('#time');
+
+		homeScore.html(gameData.homeTeam.score);
+		homeTeam.html(gameData.homeTeam.name.default);
+		awayScore.html(gameData.awayTeam.score);
+		awayTeam.html(gameData.awayTeam.name.default);
+
+		if(gameData.gameState == "PRE") {
+			gameStatus.html('<i class="fa-solid fa-circle"></i> Pregame')
+			gameStatus.addClass('pregame');
+			period.html("Pregame");
+			time.hide();
+			return
+		};
+
+		if(gameData.gameState == "OFF" || gameData.gameState == "FINAL") {
+			gameStatus.html('FINAL')
+			gameStatus.addClass('final');
+			period.html("Final");
+			time.hide();
+			return
+		}
+
+		if(gameData.gameState == "LIVE" || gameData.gameState == "CRIT") {
+			gameStatus.html('<i class="fa-solid fa-circle"></i> LIVE')
+			gameStatus.addClass('live');
+			
+			if(gameData.clock.inIntermission) {
+				period.html('Intermission');
+			} else {
+				if(gameData.displayPeriod == 1) {
+					period.html('1st');
+				} else if (gameData.displayPeriod == 2) {
+					period.html('2nd');
+				} else if (gameData.displayPeriod == 3) {
+					period.html('3rd');
+				} else {
+					period.html('OT');
+				};
+			}
+			
+			time.html(gameData.clock.timeRemaining);
+			return
+		}
+	};
+
+	$(document).ready(function () {
+		getGameData(function (gameData) {
+			setContent(gameData);
+		});
+	});
+</script>
+{% endif %}
 
 {% endblock %}
 
@@ -179,8 +262,39 @@
 			</div>
 			<h1 class="team-name" id="teamName">{{ ns.team_city }} {{ ns.team_name }} <span>Goal Horn</span></h1>
 		</header>
-		<div class="main-callout">Automated goal horn app</div>
+		<div class="main-callout"><p>Automated goal horn app</p></div>
 	</section>
+
+	{% if game_id %}
+	<section>
+		<h2 class="live-game-header">The {{ns.team_name}} have a game today!</h2>
+		<div class="live-game-callout">
+			<!-- <h2>The {{ns.team_name}} play today!</h2> -->
+			<div class="live-game-stats">
+				<div class="game-status">
+					<p id="game-status" class=""></p>
+				</div>
+				<div class="live-score">
+					<div class="team-score">
+						<div><p id="home-score"></p></div>
+						<div><p id="home-team"></p></div>
+					</div>
+					<div class="period">
+						<div><p id="period"></p></div>
+						<div><p id="time"></p></div>
+					</div>
+					<div class="team-score">
+						<div><p id="away-score"></p></div>
+						<div><p id="away-team"></p></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	</section>
+	{% endif %}
+
+
 	<!-- How to Use Instructions -->
 	<section id="instrucitons" class="instructions">
 
@@ -222,6 +336,7 @@
 		</div>
 		
 	</section>
+
 
 
 	<!-- User controls for streaming delay and goal horn -->

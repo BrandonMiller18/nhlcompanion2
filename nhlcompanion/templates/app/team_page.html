@@ -184,10 +184,10 @@
 	function setContent(gameData) {
 
 		if(gameData.gameState == "FUT") {
-			$('.live-game-callout').hide();
-			$('.live-game-header').hide();
 			return
 		};
+
+		$('#live-game-section').show();
 
 		const gameStatus = $('#game-status');
 		const homeScore = $('#home-score');
@@ -266,7 +266,7 @@
 	</section>
 
 	{% if game_id %}
-	<section>
+	<section id="live-game-section" style="display: none;">
 		<h2 class="live-game-header">The {{ns.team_name}} have a game today!</h2>
 		<div class="live-game-callout">
 			<!-- <h2>The {{ns.team_name}} play today!</h2> -->

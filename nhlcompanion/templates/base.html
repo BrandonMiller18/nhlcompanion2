@@ -19,6 +19,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/solid.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 
+    {% if env['FLASK_ENV'] == 'production' %}
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7208176221866382"
+    crossorigin="anonymous"></script>
+
     <!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -27,8 +32,7 @@
         })(window,document,'script','dataLayer','GTM-KG5NKZZ');</script>
     <!-- End Google Tag Manager -->
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7208176221866382"
-    crossorigin="anonymous"></script>
+    {% endif %}
     
     {% block html_head %}{% endblock %}
 </head>

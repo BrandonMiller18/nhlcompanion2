@@ -9,6 +9,8 @@ def create_app(test_config=None):
         app.config.from_pyfile('../config.py')
     else:
         app.config.from_mapping(test_config)
+        
+    app.jinja_env.globals['env'] = os.environ
 
     try:
         os.makedirs(app.instance_path)

@@ -198,9 +198,9 @@
 		const time = $('#time');
 
 		homeScore.html(gameData.homeTeam.score);
-		homeTeam.html(gameData.homeTeam.name.default);
+		homeTeam.html(gameData.homeTeam.commonName.default);
 		awayScore.html(gameData.awayTeam.score);
-		awayTeam.html(gameData.awayTeam.name.default);
+		awayTeam.html(gameData.awayTeam.commonName.default);
 
 		if(gameData.gameState == "PRE") {
 			gameStatus.html('<i class="fa-solid fa-circle"></i> Pregame')

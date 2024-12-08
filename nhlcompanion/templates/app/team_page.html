@@ -119,6 +119,7 @@
 			};
 
 			if (this.checked) {
+				$('.webhook-enable-text').css({'top': '0'});
 				webhook.fadeIn();
 				webhookUpdateButton.fadeIn();
 				setCookie('nhlc_enable_webhook=true');
@@ -141,6 +142,8 @@
 			if (getCookie("nhlc_webhook") && getCookie("nhlc_enable_webhook") == 'true') {
 				setEnableWebhookText(true);
 			}
+
+			$('#streamDelay').val(getCookie('nhlc_stream_delay'))
 		})
 
 		sendWebhook.click(async function() {

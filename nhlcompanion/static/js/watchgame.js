@@ -111,8 +111,12 @@ function setContent(gameData) {
 };
 
 
-function evaluatePlay(play, gameData) {
-    console.log(play.typeDescKey);
+async function evaluatePlay(play, gameData) {
+    if (play.typeDescKey == "shot-on-goal" && play.periodDescriptor.number == gameData.displayPeriod) {
+        console.log('same period shot');
+        return;
+    };
+
     if (play.typeDescKey == "goal") {
         if (play.details.eventOwnerTeamId == userTeamId) {
             webhookRequest(null);
@@ -145,6 +149,8 @@ function evaluatePlay(play, gameData) {
             };
         };
     };
+
+    return play.eventId // return id to add to seen plays
 };
 
 
@@ -174,7 +180,7 @@ async function watchGame(gameData) {
     while (liveGameStates.includes(gameData.gameState)) {
         await new Promise(r => setTimeout(r, streamDelay * 1000));
 
-        getGameData(function (res) {
+        getGameData(async function (res) {
             gameData.gameState = res.gameState;
             setContent(res);
 
@@ -183,8 +189,7 @@ async function watchGame(gameData) {
             for (i = 0; i < plays.length; i++) {
                 let playId = plays[i].eventId;
                 if (!(seenPlayIds.includes(playId))) {
-                    seenPlayIds.push(playId);
-                    evaluatePlay(plays[i], gameData);
+                    seenPlayIds.push(await evaluatePlay(plays[i], gameData));
                 };
             };
         });

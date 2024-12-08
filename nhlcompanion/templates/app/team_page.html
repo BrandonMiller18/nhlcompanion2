@@ -41,7 +41,7 @@
 
 	window.dataLayer = window.dataLayer || [];
 	window.dataLayer.push({
-		user_team: team[1],
+		user_team: team,
 	});
 </script>
 <script>
@@ -187,7 +187,7 @@
 	function setContent(gameData) {
 
 		if(gameData.gameState == "FUT") {
-			return
+			return // do not display scoreboard for future game status
 		};
 
 		$('#live-game-section').show();
@@ -208,15 +208,17 @@
 		if(gameData.gameState == "PRE") {
 			gameStatus.html('<i class="fa-solid fa-circle"></i> Pregame')
 			gameStatus.addClass('pregame');
-			period.html("Pregame");
+			period.html("vs.");
 			time.hide();
 			return
 		};
 
 		if(gameData.gameState == "OFF" || gameData.gameState == "FINAL") {
-			gameStatus.html('FINAL')
+			$('.control-button').first().addClass('control-button-disabled');
+			$('.control-button').first().text('The game is over');
+			gameStatus.html('FINAL');
 			gameStatus.addClass('final');
-			period.html("Final");
+			period.html("vs.");
 			time.hide();
 			return
 		}
@@ -224,24 +226,23 @@
 		if(gameData.gameState == "LIVE" || gameData.gameState == "CRIT") {
 			gameStatus.html('<i class="fa-solid fa-circle"></i> LIVE')
 			gameStatus.addClass('live');
+			time.html(gameData.clock.timeRemaining);
 			
 			if(gameData.clock.inIntermission) {
 				period.html('Intermission');
+				return
+			};
+
+			if(gameData.displayPeriod == 1) {
+				period.html('1st');
+			} else if (gameData.displayPeriod == 2) {
+				period.html('2nd');
+			} else if (gameData.displayPeriod == 3) {
+				period.html('3rd');
 			} else {
-				if(gameData.displayPeriod == 1) {
-					period.html('1st');
-				} else if (gameData.displayPeriod == 2) {
-					period.html('2nd');
-				} else if (gameData.displayPeriod == 3) {
-					period.html('3rd');
-				} else {
-					period.html('OT');
-				};
-			}
-			
-			time.html(gameData.clock.timeRemaining);
-			return
-		}
+				period.html('OT');
+			};
+		};
 	};
 
 	$(document).ready(function () {

@@ -113,7 +113,7 @@ function setContent(gameData) {
 
 async function evaluatePlay(play, gameData) {
     if (play.typeDescKey == "shot-on-goal" && play.periodDescriptor.number == gameData.displayPeriod) {
-        console.log('same period shot');
+        // some 'shot-on-goal' plays become a 'goal' - check these plays again so a goal is not missed
         return;
     };
 
@@ -157,6 +157,7 @@ async function evaluatePlay(play, gameData) {
 async function watchGame(gameData) {
     const liveGameStates = ["LIVE", "CRIT"];
     const preGameStates = ["PRE", "FUT"];
+    const gameOverStates = ["FINAL", "OFF"];
 
     let seenPlayIds = []
     for (i = 0; i < gameData.plays.length; i++) {
@@ -194,6 +195,11 @@ async function watchGame(gameData) {
             };
         });
     };
+
+    if (gameOverStates.includes(gameData.gameState)) {
+        window.location.replace('/start/' + getCookie('nhlc_team'));
+        return
+    }
 };
 
 

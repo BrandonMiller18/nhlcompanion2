@@ -118,6 +118,12 @@ async function evaluatePlay(play, gameData) {
     };
 
     if (play.typeDescKey == "goal") {
+        console.log(play);
+        if (!(play.details.eventOwnerTeamId)) {
+            // wait for eventOwnerTeamId to be populated - check again until eventOwnerTeamId exists
+            return;
+        };
+
         if (play.details.eventOwnerTeamId == userTeamId) {
             webhookRequest(null);
             playGoalHorn();
@@ -190,16 +196,19 @@ async function watchGame(gameData) {
             for (i = 0; i < plays.length; i++) {
                 let playId = plays[i].eventId;
                 if (!(seenPlayIds.includes(playId))) {
-                    seenPlayIds.push(await evaluatePlay(plays[i], gameData));
+                    let evaluatedId = await evaluatePlay(plays[i], gameData)
+                    if (evaluatedId) {
+                        seenPlayIds.push(evaluatedId);
+                    };
+                    console.log(seenPlayIds);
                 };
             };
         });
     };
 
     if (gameOverStates.includes(gameData.gameState)) {
-        window.location.replace('/start/' + getCookie('nhlc_team'));
-        return
-    }
+        return window.location.replace('/start/' + getCookie('nhlc_team'));
+    };
 };
 
 

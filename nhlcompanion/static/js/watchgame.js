@@ -117,16 +117,18 @@ async function evaluatePlay(play, gameData) {
         return;
     };
 
+    if (["period-start", "period-end"].includes(play.typeDescKey)) {
+        let payload = {
+            "play": play.typeDescKey,
+        };
+        webhookRequest(payload);
+    };
+
     if (play.typeDescKey == "goal") {
         console.log(play);
         if (!(play.details.eventOwnerTeamId)) {
             // wait for eventOwnerTeamId to be populated - check again until eventOwnerTeamId exists
             return;
-        };
-
-        if (play.details.eventOwnerTeamId == userTeamId) {
-            webhookRequest(null);
-            playGoalHorn();
         };
 
         var scoringPlayerId = play.details.scoringPlayerId;
@@ -142,7 +144,7 @@ async function evaluatePlay(play, gameData) {
             if (gameData.rosterSpots[i].playerId == scoringPlayerId) {
                 var playerFirstName = gameData.rosterSpots[i].firstName.default;
                 var playerLastName = gameData.rosterSpots[i].lastName.default;
-                var playerNumber = gameData.rosterSpots[i].sweaterNumber.default;
+                var playerNumber = gameData.rosterSpots[i].sweaterNumber;
                 var playerHeadshot = gameData.rosterSpots[i].headshot;
                 var playerTeamId = gameData.rosterSpots[i].teamId;
                 if (playerTeamId == homeTeamId) {
@@ -153,6 +155,19 @@ async function evaluatePlay(play, gameData) {
                 showToast('Goal', playerFirstName + ' ' + playerLastName, playerHeadshot, displayLogo);
                 showNotification(play.typeDescKey, playerFirstName + ' ' + playerLastName, displayLogo);
             };
+        };
+
+        if (play.details.eventOwnerTeamId == userTeamId) {
+            let payload = {
+                "play": play.typeDescKey,
+                "scoring_player": {
+                    "name": playerFirstName + ' ' + playerLastName,
+                    "number": playerNumber,
+                    "headshot": playerHeadshot
+                }
+            };
+            webhookRequest(payload);
+            playGoalHorn();
         };
     };
 
@@ -200,7 +215,6 @@ async function watchGame(gameData) {
                     if (evaluatedId) {
                         seenPlayIds.push(evaluatedId);
                     };
-                    console.log(seenPlayIds);
                 };
             };
         });

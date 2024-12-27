@@ -147,8 +147,10 @@
 		})
 
 		sendWebhook.click(async function() {
+			let payload = {"play": "goal"}
+			
 			sendWebhook.toggleClass('control-button-disabled');
-			await webhookRequest(null);
+			await webhookRequest(payload);
 			await new Promise(r => setTimeout(r, 500));
 			sendWebhook.toggleClass('control-button-disabled');
 		})

@@ -112,8 +112,12 @@ function setContent(gameData) {
 
 
 async function evaluatePlay(play, gameData) {
-    if (play.typeDescKey == "shot-on-goal" && play.periodDescriptor.number == gameData.displayPeriod) {
-        // some 'shot-on-goal' plays become a 'goal' - check these plays again so a goal is not missed
+
+    const skipPlayTypes = ["shot-on-goal", "missed-shot"];
+
+    if (skipPlayTypes.includes(play.typeDescKey) && play.periodDescriptor.number == gameData.displayPeriod) {
+        // some 'shot' plays become a 'goal' - check these plays again so a goal is not missed
+        console.log("Skipping play: " + play.typeDescKey + ", " + play.eventId)
         return;
     };
 
@@ -200,7 +204,6 @@ async function watchGame(gameData) {
                     if (evaluatedId) {
                         seenPlayIds.push(evaluatedId);
                     };
-                    console.log(seenPlayIds);
                 };
             };
         });

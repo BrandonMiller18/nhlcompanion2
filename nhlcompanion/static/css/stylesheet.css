@@ -86,6 +86,27 @@ body {
 }
 
 /* Header */
+
+.team-page-nav {
+    margin-bottom: 10px;
+}
+
+.go-back {
+    font-size: .75em;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.go-back:hover {
+    background-color: transparent;
+    color: #fff;
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -536,8 +557,8 @@ label {
 }
 
 .team-logo-team-page {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
 }
 
 /* Scoreboard Page Styles */

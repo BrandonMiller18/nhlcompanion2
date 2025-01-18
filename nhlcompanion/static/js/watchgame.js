@@ -117,10 +117,15 @@ async function evaluatePlay(play, gameData) {
         return;
     };
 
-    if (["period-start", "period-end"].includes(play.typeDescKey)) {
+    if (["period-start", "period-end", "game-end"].includes(play.typeDescKey)) {
         let payload = {
             "play": play.typeDescKey,
         };
+
+        if (play.periodDescriptor.number == 1 && play.typeDescKey == "period-start") {
+            payload.play = "game-start"
+        };
+
         webhookRequest(payload);
     };
 
@@ -160,11 +165,10 @@ async function evaluatePlay(play, gameData) {
         if (play.details.eventOwnerTeamId == userTeamId) {
             let payload = {
                 "play": play.typeDescKey,
-                "scoring_player": {
-                    "name": playerFirstName + ' ' + playerLastName,
-                    "number": playerNumber,
-                    "headshot": playerHeadshot
-                }
+                "scoring_player_name": playerFirstName + ' ' + playerLastName,
+                "scoring_player_number": playerNumber,
+                "scoring_player_headshot": playerHeadshot
+
             };
             webhookRequest(payload);
             playGoalHorn();

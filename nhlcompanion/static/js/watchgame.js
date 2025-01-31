@@ -113,14 +113,6 @@ function setContent(gameData) {
 
 async function evaluatePlay(play, gameData) {
 
-    const skipPlayTypes = ["shot-on-goal", "missed-shot"];
-
-    if (skipPlayTypes.includes(play.typeDescKey) && play.periodDescriptor.number == gameData.displayPeriod) {
-        // some 'shot' plays become a 'goal' - check these plays again so a goal is not missed
-        console.log("Skipping play: " + play.typeDescKey + ", " + play.eventId)
-        return;
-    };
-
     if (play.typeDescKey == "goal") {
         console.log(play);
         if (!(play.details.eventOwnerTeamId)) {
@@ -129,6 +121,7 @@ async function evaluatePlay(play, gameData) {
         };
 
         if (play.details.eventOwnerTeamId == userTeamId) {
+            await new Promise(r => setTimeout(r, streamDelay * 1000));
             webhookRequest(null);
             playGoalHorn();
         };
@@ -170,9 +163,17 @@ async function watchGame(gameData) {
     const gameOverStates = ["FINAL", "OFF"];
 
     let seenPlayIds = []
+    let seenGoalIds = []
     for (i = 0; i < gameData.plays.length; i++) {
         let eventId = gameData.plays[i].eventId;
         seenPlayIds.push(eventId);
+
+        if (gameData.plays[i].typeDescKey == "goal") {
+            seenGoalIds.push(eventId);
+        };
+
+        console.log("Seen play IDs: " + seenPlayIds); // debug 
+        console.log("Seen goal IDs: " + seenGoalIds); // debug
     }
 
     while (preGameStates.includes(gameData.gameState)) {
@@ -189,7 +190,7 @@ async function watchGame(gameData) {
     }
 
     while (liveGameStates.includes(gameData.gameState)) {
-        await new Promise(r => setTimeout(r, streamDelay * 1000));
+        await new Promise(r => setTimeout(r, 3 * 1000));
 
         getGameData(async function (res) {
             gameData.gameState = res.gameState;
@@ -197,14 +198,38 @@ async function watchGame(gameData) {
 
             let plays = res.plays
 
-            for (i = 0; i < plays.length; i++) {
+            for (let i = 0; i < plays.length; i++) {
                 let playId = plays[i].eventId;
+
+                if (plays[i].typeDescKey == "goal" && !(seenGoalIds.includes(playId))) {
+                    console.log("Evaluating play: " + playId); // debug
+
+                    let evaluatedId = await evaluatePlay(plays[i], gameData)
+                    if (evaluatedId) {
+                        console.log("Seen goal: " + playId); // debug
+
+                        seenPlayIds.push(evaluatedId);
+                        seenGoalIds.push(evaluatedId);
+
+                        console.log("Seen play IDs: " + seenPlayIds); // debug
+                        console.log("Seen goal IDs: " + seenGoalIds); // debug
+
+                    };
+                };
+
                 if (!(seenPlayIds.includes(playId))) {
+                    console.log("Evaluating play: " + playId); // debug
+
                     let evaluatedId = await evaluatePlay(plays[i], gameData)
                     if (evaluatedId) {
                         seenPlayIds.push(evaluatedId);
                     };
+
+                    console.log("Seen play IDs: " + seenPlayIds); // debug
+                    console.log("Seen goal IDs: " + seenGoalIds); // debug
                 };
+
+
             };
         });
     };
